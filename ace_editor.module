@@ -84,6 +84,11 @@ function ace_editor_form_alter(&$form, &$form_state, $form_id) {
   elseif ($form_id == 'ctools_custom_content_type_edit_form') {
     $form_ident = $form_id;
   }
+  // Fieldable Panel Panes, see:
+  // https://www.drupal.org/node/2735963
+  elseif ($form_id == 'fieldable_panels_panes_fieldable_panels_pane_content_type_edit_form') {
+    $form_ident = $form_id;
+  }
   // Beans.
   elseif (isset($form['#entity_type']) && $form['#entity_type'] == 'bean') {
     $form_ident = $form_id;
