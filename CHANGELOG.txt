@@ -1,5 +1,7 @@
-7e4f5fa (HEAD, 7.x-1.x) Issue #2737727 by aburke626: Code Style Cleanup
-f69c497 (origin/HEAD, origin/7.x-1.x) Issue #2689757 by interdruper,abeal: The editor doesn't work with node edit form while good for syntax highlight display (read only)
+5313449 (HEAD, 7.x-1.x) Calling directly 'drush en ace_editor' aborted if Libraries module was not enabled (just downloaded was enough, it will be enabled as a dependency).
+aecd572 Issue #2735963 by interdruper: Integrate with Fieldable Panel panes.
+39bcc5f (origin/HEAD, origin/7.x-1.x) Issue #2737727 by aburke626: Code Style Cleanup
+f69c497 Issue #2689757 by interdruper,abeal: The editor doesn't work with node edit form while good for syntax highlight display (read only)
 12b3f63 Many minor styling fixes from code review.
 0d67202 Issue #2693631: Ace editor assets are not properly loaded if Libraries is not enabled before installation
 77f6904 Fixed: Notice: Undefined index: ace in ace_editor_install() (line 34 of ace_editor.install

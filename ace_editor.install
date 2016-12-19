@@ -76,7 +76,16 @@ function ace_editor_requirements($phase) {
   $t = get_t();
   // Verify that the library is present.
   if ($phase == 'runtime') {
-    drupal_load('module', 'libraries');
+    // Libraries module is a dependency.
+    if (!drupal_load('module', 'libraries')) {
+      $requirements['ace_editor'] = array(
+        'title' => t('Libraries module missing'),
+        'severity' => REQUIREMENT_ERROR,
+        'value' => t('Libraries module required for Ace Editor.'),
+        'description' => $t('Ace Editor module requires the <a href="@url">Libraries module</a> to be installed.', array('@url' => 'http://drupal.org/project/libraries')),
+       );
+      return $requirements;
+    }
 
     if (!is_dir(libraries_get_path('ace'))) {
       $requirements['ace_editor'] = array(

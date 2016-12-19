@@ -42,8 +42,8 @@ function drush_download_ace($ace_version = '') {
   drush_set_context('DRUSH_NEGATIVE', FALSE);
   drush_set_context('DRUSH_AFFIRMATIVE', FALSE);
   // Libraries module is a dependency.
-  if (!module_exists('libraries')) {
-    drush_log(dt('Libraries module must be installed and enabled.'), 'error');
+  if (!drupal_load('module', 'libraries')) {
+    drush_log(dt('Libraries module must be installed.'), 'error');
     return;
   }
   // Check argument if available.
