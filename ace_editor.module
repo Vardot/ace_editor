@@ -298,8 +298,11 @@ function ace_editor_filter_process($text, $filter, $format, $langcode, $cache, $
       $replace = '<pre id="' . $element_id . '"></pre>';
       // Override settings with attributes on the tag.
       $settings = $filter->settings;
-      foreach (tag_attributes('ace', $value) as $attribute_key => $attribute_value) {
-        $settings[$attribute_key] = $attribute_value;
+      $tag_attributes = tag_attributes('ace', $value);
+      if ($tag_attributes){
+        foreach ($tag_attributes as $attribute_key => $attribute_value) {
+          $settings[$attribute_key] = $attribute_value;
+        }
       }
       $settings = ace_editor_make_js_friendly_settings($settings);
 
