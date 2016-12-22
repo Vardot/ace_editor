@@ -256,10 +256,11 @@ function ace_editor_filter_info() {
   $filters['ace_editor'] = array(
     'title' => t('Syntax highlighting'),
     'description' => t('Use &lt;ace&gt; and &lt;/ace&gt; tags to show it with syntax highlighting.
-       Add attributes to <ace> tag to control formatting.'),
+       Add attributes to <ace> tag to control formatting. <b>CAUTION:</b> This prevents content that use this filter from being cached. It is recomended not to be selected on site wide-used text formats like HTML Full/Filtered, which may have an impact on the site\'s overall performance. Enable it on a custom text format that will be only used for the content to be syntax-highlighted.'),
     'process callback' => 'ace_editor_filter_process',
     'settings callback' => 'ace_editor_filter_settings',
     'default settings' => ace_editor_field_formatter_default_settings(),
+    'cache' => FALSE,
   );
   return $filters;
 }

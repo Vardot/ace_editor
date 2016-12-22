@@ -1,4 +1,6 @@
-5313449 (HEAD, 7.x-1.x) Calling directly 'drush en ace_editor' aborted if Libraries module was not enabled (just downloaded was enough, it will be enabled as a dependency).
+d0d11de (HEAD, 7.x-1.x) Issue #2657808 by interdruper: Embedded syntax highlighting via <ace> tag doesn't work when viewing a node. Fix: cache has been disabled for this filter. Filter description explains how to minimize the impact.
+86994b2 Issue #2076279 by interdruper, jameswoods: tag_attributes not returning results causing errors
+03a046a Calling directly 'drush en ace_editor' aborted if Libraries module was not enabled (just downloaded was enough, it will be enabled as a dependency).
 aecd572 Issue #2735963 by interdruper: Integrate with Fieldable Panel panes.
 39bcc5f (origin/HEAD, origin/7.x-1.x) Issue #2737727 by aburke626: Code Style Cleanup
 f69c497 Issue #2689757 by interdruper,abeal: The editor doesn't work with node edit form while good for syntax highlight display (read only)
