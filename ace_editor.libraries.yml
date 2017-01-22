@@ -1,0 +1,44 @@
+primary:
+  version: VERSION
+  js:
+    js/editor.js: {}
+    libraries/ace/src-noconflict/ace.js: {weight: -2}
+#    libraries/ace/src-noconflict/ext-language_tools.js: {weight:-1}
+
+  css:
+    component:
+      styles/editor.css: {}
+  dependencies:
+    - core/jquery
+    - core/drupal
+    - core/drupalSettings
+
+formatter:
+  version: VERSION
+  js:
+    js/formatter.js: {}
+    libraries/ace/src-noconflict/ace.js: {weight: -2}
+#    libraries/ace/src-noconflict/ext-language_tools.js: {weight:-1}
+
+  css:
+    component:
+      styles/editor.css: {}
+  dependencies:
+    - core/jquery
+    - core/drupal
+    - core/drupalSettings
+
+filter:
+  version: VERSION
+  js:
+    js/filter.js: {}
+    libraries/ace/src-noconflict/ace.js: {weight: -2}
+#    libraries/ace/src-noconflict/ext-language_tools.js: {weight:-1}
+    
+  css:
+    component:
+      styles/editor.css: {}
+  dependencies:
+    - core/jquery
+    - core/drupal
+    - core/drupalSettings
