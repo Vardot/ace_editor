@@ -1,40 +1,42 @@
 <?php
+
 /**
+ * @file
  * Created by PhpStorm.
  * User: bobyaloysiusjohnson
  * Date: 26/12/16
- * Time: 4:33 PM
+ * Time: 4:33 PM.
  */
 
 /**
- * implements hook_library_info_build()
+ * Implements hook_library_info_build()
  *
  * Selects all theme and mode files from ace editor external library and add it to drupal library.
  */
 function ace_editor_library_info_build() {
 
-    $module_path = drupal_get_path('module','ace_editor');
-    $rel_src = "libraries/ace/src-noconflict";
-    $path = $module_path."/".$rel_src;
+  $module_path = drupal_get_path('module', 'ace_editor');
+  $rel_src = "libraries/ace/src-noconflict";
+  $path = $module_path . "/" . $rel_src;
 
-    // Collects all theme and mode file available.
-    $files = file_scan_directory($path,'/(theme|mode)-(.+)\.js$/', array('recurse' => FALSE));
+  // Collects all theme and mode file available.
+  $files = file_scan_directory($path, '/(theme|mode)-(.+)\.js$/', array('recurse' => FALSE));
 
-    $libraries = [];
-    foreach ($files as $file_info) {
+  $libraries = [];
+  foreach ($files as $file_info) {
 
-        $asset = explode('-', $file_info->name);
-        $library_name = $asset[0].".".$asset[1];
-        $libraries[$library_name] = $rel_src."/".$file_info->filename;
+    $asset = explode('-', $file_info->name);
+    $library_name = $asset[0] . "." . $asset[1];
+    $libraries[$library_name] = $rel_src . "/" . $file_info->filename;
 
-    }
-    $libs=[];
-    foreach($libraries as $key => $value){
-        $libs[$key] = [
-            'js' => [
-                $value => []
-            ]
-        ];
-    }
-    return $libs;
+  }
+  $libs = [];
+  foreach ($libraries as $key => $value) {
+    $libs[$key] = [
+      'js' => [
+        $value => [],
+      ],
+    ];
+  }
+  return $libs;
 }
