@@ -182,9 +182,9 @@ syntax_list:
 
 syntax: 'html'
 
-height: '500px'
+height: '300px'
 
-width: '700px'
+width: '100%'
 
 font_size: '10pt'
 
