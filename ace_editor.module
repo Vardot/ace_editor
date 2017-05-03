@@ -114,8 +114,10 @@ function ace_editor_form_alter(&$form, &$form_state, $form_id) {
   elseif ($form_id == 'views_ui_config_item_form' && strpos($form['#title'], 'Global: Text area') !== FALSE) {
     $form_ident = $form_id;
   }
-  // Views PHP:
-  // @TODO: work in progress.
+  // i18n translation forms
+  elseif ($form_id == 'i18n_string_translate_page_form') {
+    $form_ident = $form_id;
+  }
   else {
     return;
   }
