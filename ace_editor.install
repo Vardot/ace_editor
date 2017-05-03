@@ -106,7 +106,7 @@ function ace_editor_requirements($phase) {
   }
 
   if ($phase == 'install') {
-    if (!drupal_get_path('module', 'libraries')) {
+    if (!module_exists('libraries')) {
       $requirements['ace_editor'] = array(
         'title' => $t('Libraries module is missing'),
         'severity' => REQUIREMENT_ERROR,
@@ -115,15 +115,8 @@ function ace_editor_requirements($phase) {
       );
     }
     elseif (function_exists('libraries_get_libraries') && !is_dir(libraries_get_path('ace'))) {
-      $requirements['ace_editor'] = array(
-        'title' => $t('Ace Library is missing'),
-        'severity' => REQUIREMENT_ERROR,
-        'value' => $t('Ace Library required for Ace Editor.'),
-        'description' => $t('The required Ace library is missing. The library can be found at <a href="@url">@url</a>. You can install it manually following the README.txt instructions or using the provided drush command "drush dl-ace".',
-          array('@url' => 'https://github.com/ajaxorg/ace')),
-      );
       drupal_set_message(
-        $t('The required Ace library is missing. The library can be found at <a href="@url">@url</a>. You can install it manually following the README.txt instructions or using the provided drush command "drush dl-ace".',
+        $t('The required Ace library is missing. The library can be found at <a href="@url">@url</a>. You can install it manually following the README.txt instructions or using the "drush dl-ace" command (it will be downloaded to the libraries/ace directory).',
           array('@url' => 'https://github.com/ajaxorg/ace')),
         'warning'
         );
