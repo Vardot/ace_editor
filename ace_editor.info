@@ -4,9 +4,3 @@ package = Administration
 core = 7.x
 configure = admin/config/content/ace-editor
 dependencies[] = libraries
-
-; Information added by Drupal.org packaging script on 2016-03-24
-version = "7.x-1.7+4-dev"
-core = "7.x"
-project = "ace_editor"
-datestamp = "1458834842"

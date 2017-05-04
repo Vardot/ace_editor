@@ -1,6 +1,7 @@
-8cd5603 (HEAD, 7.x-1.x) Adding support for i18n translation forms.
+dcb71b7 (HEAD, 7.x-1.x) Removing wrong and unnecessary version stataments from .info file.
+fa2b9b8 (origin/HEAD, origin/7.x-1.x) Adding support for i18n translation forms.
 0c847bc Avoiding a blocking sequence under some conditions due to the installation requirements.
-fb204a7 (tag: 7.x-1.8, origin/HEAD, origin/7.x-1.x) Issue #2657808 by interdruper: Embedded syntax highlighting via <ace> tag doesn't work when viewing a node. Fix: cache has been disabled for this filter. Filter description explains how to minimize the impact.
+fb204a7 (tag: 7.x-1.8) Issue #2657808 by interdruper: Embedded syntax highlighting via <ace> tag doesn't work when viewing a node. Fix: cache has been disabled for this filter. Filter description explains how to minimize the impact.
 86994b2 Issue #2076279 by interdruper, jameswoods: tag_attributes not returning results causing errors
 03a046a Calling directly 'drush en ace_editor' aborted if Libraries module was not enabled (just downloaded was enough, it will be enabled as a dependency).
 aecd572 Issue #2735963 by interdruper: Integrate with Fieldable Panel panes.
