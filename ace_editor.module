@@ -118,6 +118,14 @@ function ace_editor_form_alter(&$form, &$form_state, $form_id) {
   elseif ($form_id == 'i18n_string_translate_page_form') {
     $form_ident = $form_id;
   }
+  // Webform configuration form (confirmation message)
+  elseif ($form_id == 'webform_configure_form') {
+    $form_ident = $form_id;
+  }
+  // Taxonomy terms edit forms
+  elseif ($form_id == 'taxonomy_form_term') {
+    $form_ident = $form_id;
+  }
   else {
     return;
   }
