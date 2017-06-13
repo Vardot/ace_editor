@@ -13,32 +13,24 @@ use Drupal\filter\Plugin\FilterBase;
  *   description = @Translation("Use &lt;ace&gt; and &lt;/ace&gt; tags to show it with syntax highlighting.
  * Add attributes to <ace> tag to control formatting."),
  *   type = Drupal\filter\Plugin\FilterInterface::TYPE_MARKUP_LANGUAGE,
+ *   settings = {
+ *           "theme" = "cobalt",
+ *           "syntax" = "html",
+ *           "height" = "500px",
+ *           "width" = "700px",
+ *           "font_size" = "10pt",
+ *           "line_numbers" = TRUE,
+ *           "show_invisibles" = FALSE,
+ *           "print_margins" = TRUE,
+ *           "auto_complete" = TRUE,
+ *     }
  * )
  */
 class AceFilter extends FilterBase {
 
-  /**
-   * {@inheritdoc}
-   */
-  public function getConfiguration() {
-    return array(
-      'id' => $this->getPluginId(),
-      'provider' => $this->pluginDefinition['provider'],
-      'status' => $this->status,
-      'weight' => $this->weight,
-      'settings' => $this->settings ?: \Drupal::config('ace_editor.settings')->get(),
-    );
-  }
-
-  /**
-   *
-   */
   public function settingsForm(array $form, FormStateInterface $form_state) {
 
-    $settings = $this->getConfiguration()['settings'];
-
-    // $this->getSettings() will return values form defaultSettings() on first use.
-    // afterwards it will return the forms saved configuration.
+    $settings = $this->settings;
     $config = \Drupal::config('ace_editor.settings');
 
     return array(
