@@ -571,7 +571,6 @@ function ace_editor_libraries_info() {
     'version arguments' => array(
       'file' => 'package.json',
       'pattern' => '/"version": "(\d+\.+\d+.+\d+)"/',
-      'lines' => 3,
     ),
     'files' => array(
       'js' => array(

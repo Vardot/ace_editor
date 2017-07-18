@@ -1,5 +1,6 @@
-e8621c6 (HEAD, 7.x-1.x) Adding support for taxonomy terms edit forms.
-6e59c96 (origin/HEAD, origin/7.x-1.x) Removing wrong and unnecessary version stataments from .info file.
+75ec085 (HEAD -> 7.x-1.x) Issue #2894399 by drupov: Error: "The Ace Editor JS library is missing"
+5058cb2 (origin/HEAD, origin/7.x-1.x) Adding support for taxonomy terms edit forms.
+6e59c96 Removing wrong and unnecessary version stataments from .info file.
 fa2b9b8 Adding support for i18n translation forms.
 0c847bc Avoiding a blocking sequence under some conditions due to the installation requirements.
 fb204a7 (tag: 7.x-1.8) Issue #2657808 by interdruper: Embedded syntax highlighting via <ace> tag doesn't work when viewing a node. Fix: cache has been disabled for this filter. Filter description explains how to minimize the impact.
