@@ -43,6 +43,10 @@
                 enableBasicAutocompletion: format.editorSettings.auto_complete ? true: false
             });
 
+            if (format.editorSettings.use_wrap_mode) {
+              editors[ace_editor_id].getSession().setUseWrapMode(true);
+            }
+
             return !!current_editor;
             
         },

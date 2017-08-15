@@ -195,3 +195,5 @@ show_invisibles: FALSE
 print_margins: TRUE
 
 auto_complete: TRUE
+
+use_wrap_mode: TRUE

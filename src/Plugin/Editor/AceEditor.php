@@ -105,6 +105,11 @@ class AceEditor extends EditorBase {
         '#title' => t('Show partially visible ... for better code matching'),
         '#default_value' => $settings['show_invisibles'],
       ),
+      'use_wrap_mode' => array(
+        '#type' => 'checkbox',
+        '#title' => t('Toggle word wrapping'),
+        '#default_value' => $settings['use_wrap_mode'],
+      ),
         /**
            * 'auto_complete' => array(
            * '#type' => 'checkbox',
