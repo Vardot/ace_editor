@@ -1,8 +1,8 @@
 name: Ace Editor
 type: module
-description: Provides a customizable text editor.
+description: Provides integration with <a target="_blank" href="https://ace.c9.io/">Ace code editor</a>.
 package: Content authoring
 # core: 8.x
 dependencies:
-  - editor
+  - drupal:editor
 core: '8.x'
