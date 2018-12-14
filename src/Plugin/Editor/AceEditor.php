@@ -13,6 +13,7 @@ use Drupal\editor\Entity\Editor;
  *   id = "ace_editor",
  *   label = "Ace Editor",
  *   supports_content_filtering = TRUE,
+ *   supports_inline_editing = TRUE,
  *   is_xss_safe = FALSE,
  *   supported_element_types = {
  *     "textarea"
