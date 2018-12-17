@@ -18,7 +18,7 @@ use Drupal\filter\Plugin\FilterBase;
  *           "syntax" = "html",
  *           "height" = "500px",
  *           "width" = "700px",
- *           "font_size" = "10pt",
+ *           "font_size" = "12pt",
  *           "line_numbers" = TRUE,
  *           "show_invisibles" = FALSE,
  *           "print_margins" = TRUE,
@@ -102,13 +102,6 @@ class AceFilter extends FilterBase {
         '#title' => t('Toggle word wrapping'),
         '#default_value' => $settings['use_wrap_mode'],
       ),
-        /**
-           * 'auto_complete' => array(
-           * '#type' => 'checkbox',
-           * '#title' => t('Enable AutoComplete'),
-           * '#default_value' => $settings['auto_complete']
-           * ),
-            **/
     );
 
   }

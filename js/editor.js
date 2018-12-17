@@ -36,7 +36,7 @@
             // Setting ace_editor styles.
             $("#"+ace_editor_id).height(format.editorSettings.height).width(format.editorSettings.width);
             editors[ace_editor_id].setOptions({
-                fontSize: format.editorSettings.font_size ? format.editorSettings.font_size : '10px',
+                fontSize: format.editorSettings.font_size ? format.editorSettings.font_size : '12pt',
                 showLineNumbers: format.editorSettings.line_numbers ? true : false,
                 showPrintMargin: format.editorSettings.print_margin ? true: false,
                 showInvisibles: format.editorSettings.show_invisibles ? true: false,

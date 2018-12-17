@@ -181,19 +181,11 @@ syntax_list:
   yaml: "YAML"
 
 syntax: 'html'
-
 height: '300px'
-
 width: '100%'
-
-font_size: '10pt'
-
-line_numbers: TRUE
-
-show_invisibles: FALSE
-
-print_margins: TRUE
-
-auto_complete: TRUE
-
-use_wrap_mode: TRUE
+font_size: '12pt'
+line_numbers: true
+show_invisibles: false
+print_margins: true
+auto_complete: true
+use_wrap_mode: true
