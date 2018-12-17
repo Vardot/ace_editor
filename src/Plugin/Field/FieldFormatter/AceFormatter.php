@@ -13,7 +13,8 @@ use Drupal\Core\Form\FormStateInterface;
  *   id = "ace_formatter",
  *   label = @Translation("Ace Format"),
  *   field_types = {
- *     "text_with_summary"
+ *     "text_with_summary",
+ *     "text_long",
  *   }
  * )
  */
@@ -117,13 +118,6 @@ class AceFormatter extends FormatterBase {
         '#title' => t('Toggle word wrapping'),
         '#default_value' => $settings['use_wrap_mode'],
       ),
-        /**
-           * 'auto_complete' => array(
-           * '#type' => 'checkbox',
-           * '#title' => t('Enable AutoComplete'),
-           * '#default_value' => $settings['auto_complete']
-           * ),
-            **/
     );
 
   }
