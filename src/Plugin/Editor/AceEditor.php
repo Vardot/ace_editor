@@ -66,8 +66,7 @@ class AceEditor extends EditorBase {
       'height' => array(
         '#type' => 'textfield',
         '#title' => t('Height'),
-        '#description' => t('The height of the editor in either pixels or percents.
-        You can use "auto" to let the editor calculate the adequate height.'),
+        '#description' => t('The height of the editor in either pixels or percents. You can use "auto" to let the editor calculate the adequate height.'),
         '#attributes' => array(
           'style' => 'width: 100px;',
         ),
@@ -85,7 +84,7 @@ class AceEditor extends EditorBase {
       'font_size' => array(
         '#type' => 'textfield',
         '#title' => t('Font size'),
-        '#description' => t('The the font size of the editor.'),
+        '#description' => t('The font size used in the editor.'),
         '#attributes' => array(
           'style' => 'width: 100px;',
         ),
@@ -98,7 +97,7 @@ class AceEditor extends EditorBase {
       ),
       'print_margins' => array(
         '#type' => 'checkbox',
-        '#title' => t('Print Margins'),
+        '#title' => t('Print margins'),
         '#default_value' => $settings['print_margins'],
       ),
       'show_invisibles' => array(
@@ -111,13 +110,11 @@ class AceEditor extends EditorBase {
         '#title' => t('Toggle word wrapping'),
         '#default_value' => $settings['use_wrap_mode'],
       ),
-        /**
-           * 'auto_complete' => array(
-           * '#type' => 'checkbox',
-           * '#title' => t('Enable AutoComplete'),
-           * '#default_value' => $settings['auto_complete']
-           * ),
-            **/
+      'auto_complete' => array(
+        '#type' => 'checkbox',
+        '#title' => t('Enable Autocomplete (Ctrl+Space'),
+        '#default_value' => isset($settings['auto_complete']) ? $settings['auto_complete'] : TRUE,
+      ),
     );
   }
 
