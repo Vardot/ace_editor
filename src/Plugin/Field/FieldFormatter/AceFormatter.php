@@ -78,7 +78,7 @@ class AceFormatter extends FormatterBase {
           'style' => 'width: 100px;',
         ],
         '#default_value' => $settings['height'],
-      ),
+      ],
       'width' => [
         '#type' => 'textfield',
         '#title' => t('Width'),
@@ -147,7 +147,7 @@ class AceFormatter extends FormatterBase {
         '#attributes' => [
           'class' => [ 'content' ],
           'readonly' => 'readonly',
-        ),
+        ],
         '#prefix' => '<div class="ace_formatter">',
         '#suffix' => '<div>',
       ];
