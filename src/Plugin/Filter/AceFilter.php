@@ -89,7 +89,7 @@ class AceFilter extends FilterBase {
       ],
       'print_margins' => [
         '#type' => 'checkbox',
-        '#title' => t('Print Margins'),
+        '#title' => t('Print margins'),
         '#default_value' => $settings['print_margins'],
       ],
       'show_invisibles' => [
@@ -184,7 +184,7 @@ class AceFilter extends FilterBase {
           if ($value == "1" || $value == "0" || $value == "true" || $value == "false") {
             $value = intval($value);
           }
-          $attribute_array[$attribute[1]] = $value;
+          $attribute_array[str_replace('-', '_', $attribute[1])] = $value;
         }
         return $attribute_array;
       }
