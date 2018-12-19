@@ -21,7 +21,7 @@ use Drupal\Core\Form\FormStateInterface;
 class AceFormatter extends FormatterBase {
 
   /**
-   *
+   * {@inheritdoc}
    */
   public static function defaultSettings() {
     // Get default ace_editor configuration.
@@ -33,7 +33,7 @@ class AceFormatter extends FormatterBase {
    * {@inheritdoc}
    */
   public function settingsSummary() {
-    $summary = array();
+    $summary = [];
     $summary[] = t('Displays your code in an editor format');
     return $summary;
 
@@ -42,7 +42,7 @@ class AceFormatter extends FormatterBase {
   /**
    * {@inheritdoc}
    */
-  public function settingsForm(array $form, FormStateInterface $form_state) {
+  public function settingsForm(array $form, FormStateInterface $formState) {
 
     $settings = $this->getSettings();
 
@@ -50,76 +50,74 @@ class AceFormatter extends FormatterBase {
     // afterwards it will return the forms saved configuration.
     $config = \Drupal::config('ace_editor.settings');
 
-    return array(
-      'theme' => array(
+    return [
+      'theme' => [
         '#type' => 'select',
         '#title' => t('Theme'),
         '#options' => $config->get('theme_list'),
-        '#attributes' => array(
+        '#attributes' => [
           'style' => 'width: 150px;',
-        ),
+        ],
         '#default_value' => $settings['theme'],
-      ),
-      'syntax' => array(
+      ],
+      'syntax' => [
         '#type' => 'select',
         '#title' => t('Syntax'),
         '#description' => t('The syntax that will be highlighted.'),
         '#options' => $config->get('syntax_list'),
-        '#attributes' => array(
+        '#attributes' => [
           'style' => 'width: 150px;',
-        ),
+        ],
         '#default_value' => $settings['syntax'],
-      ),
-      'height' => array(
+      ],
+      'height' => [
         '#type' => 'textfield',
         '#title' => t('Height'),
-        '#description' => t('The height of the editor in either pixels or percents.
-        You can use "auto" to let the editor calculate the adequate height.'),
-        '#attributes' => array(
+        '#description' => t('The height of the editor in either pixels or percents. You can use "auto" to let the editor calculate the adequate height.'),
+        '#attributes' => [
           'style' => 'width: 100px;',
-        ),
+        ],
         '#default_value' => $settings['height'],
       ),
-      'width' => array(
+      'width' => [
         '#type' => 'textfield',
         '#title' => t('Width'),
         '#description' => t('The width of the editor in either pixels or percents.'),
-        '#attributes' => array(
+        '#attributes' => [
           'style' => 'width: 100px;',
-        ),
+        ],
         '#default_value' => $settings['width'],
-      ),
-      'font_size' => array(
+      ],
+      'font_size' => [
         '#type' => 'textfield',
         '#title' => t('Font size'),
         '#description' => t('The the font size of the editor.'),
-        '#attributes' => array(
+        '#attributes' => [
           'style' => 'width: 100px;',
-        ),
+        ],
         '#default_value' => $settings['font_size'],
-      ),
-      'line_numbers' => array(
+      ],
+      'line_numbers' => [
         '#type' => 'checkbox',
         '#title' => t('Show line numbers'),
         '#default_value' => $settings['line_numbers'],
-      ),
-      'print_margins' => array(
+      ],
+      'print_margins' => [
         '#type' => 'checkbox',
         '#title' => t('Print Margins'),
         '#default_value' => $settings['print_margins'],
-      ),
-      'show_invisibles' => array(
+      ],
+      'show_invisibles' => [
         '#type' => 'checkbox',
         '#title' => t('Show partially visible ... for better code matching'),
         '#default_value' => $settings['show_invisibles'],
-      ),
-      'use_wrap_mode' => array(
+      ],
+      'use_wrap_mode' => [
         '#type' => 'checkbox',
         '#title' => t('Toggle word wrapping'),
         '#default_value' => $settings['use_wrap_mode'],
-      ),
-    );
-
+      ],
+     ];
   }
 
   /**
@@ -127,35 +125,33 @@ class AceFormatter extends FormatterBase {
    */
   public function viewElements(FieldItemListInterface $items, $langcode) {
     // Renders front-end of our formatter.
-    $elements = array();
+    $elements = [];
     $settings = $this->getSettings();
 
     foreach ($items as $delta => $item) {
-      $elements[$delta] = array(
+      $elements[$delta] = [
         '#type' => 'textarea',
         '#value' => $item->value,
         // Attach libraries as per the setting.
-        '#attached' => array(
-          'library' => array(
+        '#attached' => [
+          'library' => [
             'ace_editor/formatter',
             'ace_editor/theme.' . $settings['theme'],
             'ace_editor/mode.' . $settings['syntax'],
-          ),
-          'drupalSettings' => array(
+          ],
+          'drupalSettings' => [
              // Pass settings variable ace_formatter to javascript.
             'ace_formatter' => $settings,
-          ),
+          ],
+        ],
+        '#attributes' => [
+          'class' => [ 'content' ],
+          'readonly' => 'readonly',
         ),
-        '#attributes' => array(
-          "class" => array("content"),
-          "readonly" => "readonly",
-        ),
-        '#prefix' => "<div class='ace_formatter'>",
-        '#suffix' => "<div>",
-
-      );
+        '#prefix' => '<div class="ace_formatter">',
+        '#suffix' => '<div>',
+      ];
     }
     return $elements;
   }
-
 }

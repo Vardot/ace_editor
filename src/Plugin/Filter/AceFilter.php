@@ -34,76 +34,75 @@ class AceFilter extends FilterBase {
     $settings = $this->settings;
     $config = \Drupal::config('ace_editor.settings');
 
-    return array(
-      'theme' => array(
+    return [
+      'theme' => [
         '#type' => 'select',
         '#title' => t('Theme'),
         '#options' => $config->get('theme_list'),
-        '#attributes' => array(
+        '#attributes' => [
           'style' => 'width: 150px;',
-        ),
+        ],
         '#default_value' => $settings['theme'],
-      ),
-      'syntax' => array(
+      ],
+      'syntax' => [
         '#type' => 'select',
         '#title' => t('Syntax'),
         '#description' => t('The syntax that will be highlighted.'),
         '#options' => $config->get('syntax_list'),
-        '#attributes' => array(
+        '#attributes' => [
           'style' => 'width: 150px;',
-        ),
+        ],
         '#default_value' => $settings['syntax'],
-      ),
-      'height' => array(
+      ],
+      'height' => [
         '#type' => 'textfield',
         '#title' => t('Height'),
         '#description' => t('The height of the editor in either pixels or percents.
         You can use "auto" to let the editor calculate the adequate height.'),
-        '#attributes' => array(
+        '#attributes' => [
           'style' => 'width: 100px;',
-        ),
+        ],
         '#default_value' => $settings['height'],
-      ),
-      'width' => array(
+      ],
+      'width' => [
         '#type' => 'textfield',
         '#title' => t('Width'),
         '#description' => t('The width of the editor in either pixels or percents.'),
-        '#attributes' => array(
+        '#attributes' => [
           'style' => 'width: 100px;',
-        ),
+        ],
         '#default_value' => $settings['width'],
-      ),
-      'font_size' => array(
+      ],
+      'font_size' => [
         '#type' => 'textfield',
         '#title' => t('Font size'),
         '#description' => t('The the font size of the editor.'),
-        '#attributes' => array(
+        '#attributes' => [
           'style' => 'width: 100px;',
-        ),
+        ],
         '#default_value' => $settings['font_size'],
-      ),
-      'line_numbers' => array(
+      ],
+      'line_numbers' => [
         '#type' => 'checkbox',
         '#title' => t('Show line numbers'),
         '#default_value' => $settings['line_numbers'],
-      ),
-      'print_margins' => array(
+      ],
+      'print_margins' => [
         '#type' => 'checkbox',
         '#title' => t('Print Margins'),
         '#default_value' => $settings['print_margins'],
-      ),
-      'show_invisibles' => array(
+      ],
+      'show_invisibles' => [
         '#type' => 'checkbox',
         '#title' => t('Show partially visible ... for better code matching'),
         '#default_value' => $settings['show_invisibles'],
-      ),
-      'use_wrap_mode' => array(
+      ],
+      'use_wrap_mode' => [
         '#type' => 'checkbox',
         '#title' => t('Toggle word wrapping'),
         '#default_value' => $settings['use_wrap_mode'],
-      ),
-    );
-
+      ],
+    ];
   }
 
   /**
@@ -114,19 +113,18 @@ class AceFilter extends FilterBase {
     $text = html_entity_decode($text);
 
     if (preg_match_all("/<ace.*?>(.*?)\s*<\/ace>/s", $text, $match)) {
-      $js_settings = array(
-        'instances' => array(),
+      $js_settings = [
+        'instances' => [],
         'theme_settings' => $this->getConfiguration()['settings'],
-      );
+      ];
 
       foreach ($match[0] as $key => $value) {
-
         $element_id = 'ace-editor-inline' . $key;
         $content = trim($match[1][$key], "\n\r\0\x0B");
         $replace = '<pre id="' . $element_id . '"></pre>';
         // Override settings with attributes on the tag.
-        $settings = $this->getConfiguration()->settings;
-        $attach_lib = array();
+        $settings = $this->getConfiguration()['settings'];
+        $attach_lib = [];
 
         foreach ($this->tag_attributes('ace', $value) as $attribute_key => $attribute_value) {
           $settings[$attribute_key] = $attribute_value;
@@ -139,26 +137,27 @@ class AceFilter extends FilterBase {
           }
         }
 
-        $js_settings['instances'][] = array(
+        $js_settings['instances'][] = [
           'id' => $element_id,
           'content' => $content,
           'settings' => $settings,
-        );
+        ];
         $text = $this->str_replace_once($value, $replace, $text);
       }
 
       $result = new FilterProcessResult($text);
       $attach_lib[] = 'ace_editor/filter';
-      $result->setAttachments(array(
-        'library' => $attach_lib,
-        'drupalSettings' => array(
+      $result->setAttachments(
+        [
+          'library' => $attach_lib,
+          'drupalSettings' => [
             // Pass settings variable ace_formatter to javascript.
-          'ace_filter' => $js_settings,
-        ),
-      ));
+            'ace_filter' => $js_settings,
+          ],
+        ]
+      );
 
       return $result;
-
     }
 
     $result = new FilterProcessResult($text);
@@ -173,7 +172,7 @@ class AceFilter extends FilterBase {
     $found = preg_match('#<' . $element_name . '\s+([^>]+(?:"|\'))\s?/?>#', $xml, $matches);
 
     if ($found == 1) {
-      $attribute_array = array();
+      $attribute_array = [];
       $attribute_string = $matches[1];
       // Match attribute-name attribute-value pairs.
       $found = preg_match_all('#([^\s=]+)\s*=\s*(\'[^<\']*\'|"[^<"]*")#', $attribute_string, $matches, PREG_SET_ORDER);
@@ -210,5 +209,4 @@ class AceFilter extends FilterBase {
     }
     return substr_replace($haystack, $replace, $pos, strlen($needle));
   }
-
 }
