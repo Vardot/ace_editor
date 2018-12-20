@@ -66,7 +66,7 @@ class AceEditor extends EditorBase {
       'height' => [
         '#type' => 'textfield',
         '#title' => t('Height'),
-        '#description' => t('The height of the editor in either pixels or percents. You can use "auto" to let the editor calculate the adequate height.'),
+        '#description' => t('The height of the editor in either pixels or percents.'),
         '#attributes' => [
           'style' => 'width: 100px;',
         ],
@@ -97,12 +97,12 @@ class AceEditor extends EditorBase {
       ],
       'print_margins' => [
         '#type' => 'checkbox',
-        '#title' => t('Print margins'),
+        '#title' => t('Show print margin (80 chars)'),
         '#default_value' => $settings['print_margins'],
       ],
       'show_invisibles' => [
         '#type' => 'checkbox',
-        '#title' => t('Show partially visible ... for better code matching'),
+        '#title' => t('Show invisible characters (whitespaces, EOL...)'),
         '#default_value' => $settings['show_invisibles'],
       ],
       'use_wrap_mode' => [

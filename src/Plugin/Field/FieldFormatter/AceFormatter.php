@@ -2,12 +2,17 @@
 
 namespace Drupal\ace_editor\Plugin\Field\FieldFormatter;
 
+use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Field\FormatterBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\Core\Render\RendererInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+
 
 /**
- * Plugin implementation of the 'sample_wkt' formatter.
+ * Plugin implementation of the 'ace_editor' formatter.
  *
  * @FieldFormatter (
  *   id = "ace_formatter",
@@ -18,7 +23,59 @@ use Drupal\Core\Form\FormStateInterface;
  *   }
  * )
  */
-class AceFormatter extends FormatterBase {
+class AceFormatter extends FormatterBase implements ContainerFactoryPluginInterface {
+  
+  /**
+   * The renderer service.
+   *
+   * @var \Drupal\Core\Render\RendererInterface
+   */
+  protected $renderer;
+
+  /**
+   * Constructs an AceFormatter instance.
+   *
+   * @param string $plugin_id
+   *   The plugin_id for the formatter.
+   * @param mixed $plugin_definition
+   *   The plugin implementation definition.
+   * @param \Drupal\Core\Field\FieldDefinitionInterface $field_definition
+   *   The definition of the field to which the formatter is associated.
+   * @param array $settings
+   *   The formatter settings.
+   * @param string $label
+   *   The formatter label display setting.
+   * @param string $view_mode
+   *   The view mode.
+   * @param array $third_party_settings
+   *   Any third party settings settings.
+   * @param \Drupal\Core\Entity\EntityManagerInterface $entity_manager
+   *   The entity manager.
+   * @param \Drupal\Core\Render\RendererInterface $renderer
+   *   The rendered service
+   */
+  public function __construct($plugin_id, $plugin_definition, FieldDefinitionInterface $field_definition, array $settings, $label, $view_mode, array $third_party_settings, RendererInterface $renderer) {
+
+    parent::__construct($plugin_id, $plugin_definition, $field_definition, $settings, $label, $view_mode, $third_party_settings);
+
+    $this->renderer = $renderer;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
+    return new static(
+      $plugin_id,
+      $plugin_definition,
+      $configuration['field_definition'],
+      $configuration['settings'],
+      $configuration['label'],
+      $configuration['view_mode'],
+      $configuration['third_party_settings'],
+			$container->get('renderer')
+    );
+  }
 
   /**
    * {@inheritdoc}
@@ -26,15 +83,26 @@ class AceFormatter extends FormatterBase {
   public static function defaultSettings() {
     // Get default ace_editor configuration.
     $config = \Drupal::config('ace_editor.settings')->get();
-    return $config;
+    return $config + parent::defaultSettings();
   }
 
   /**
    * {@inheritdoc}
    */
   public function settingsSummary() {
+    $settings = $this->getSettings();
+
     $summary = [];
-    $summary[] = t('Displays your code in an editor format');
+    $summary[] = t('Theme: ') . $settings['theme'];
+    $summary[] = t('Syntax: ') . $settings['syntax'];
+    $summary[] = t('Height: ') . $settings['height'];
+    $summary[] = t('Width: ') . $settings['width'];
+    $summary[] = t('Font size: ') . $settings['font_size'];
+    $summary[] = t('Show line numbers: ') . ($settings['line_numbers'] ? t('On') : t('Off'));
+    $summary[] = t('Show print margin: ') . ($settings['print_margins'] ? t('On') : t('Off'));
+    $summary[] = t('Show invisible characters: ') . ($settings['show_invisibles'] ? t('On') : t('Off'));
+    $summary[] = t('Toggle word wrapping: ') . ($settings['use_wrap_mode'] ? t('On') : t('Off'));
+
     return $summary;
 
   }
@@ -46,7 +114,7 @@ class AceFormatter extends FormatterBase {
 
     $settings = $this->getSettings();
 
-    // $this->getSettings() will return values form defaultSettings() on first use.
+    // $this->getSettings() will return values from defaultSettings() on first use.
     // afterwards it will return the forms saved configuration.
     $config = \Drupal::config('ace_editor.settings');
 
@@ -73,7 +141,7 @@ class AceFormatter extends FormatterBase {
       'height' => [
         '#type' => 'textfield',
         '#title' => t('Height'),
-        '#description' => t('The height of the editor in either pixels or percents. You can use "auto" to let the editor calculate the adequate height.'),
+        '#description' => t('The height of the editor in either pixels or percents.'),
         '#attributes' => [
           'style' => 'width: 100px;',
         ],
@@ -104,12 +172,12 @@ class AceFormatter extends FormatterBase {
       ],
       'print_margins' => [
         '#type' => 'checkbox',
-        '#title' => t('Print Margins'),
+        '#title' => t('Show print margin (80 chars)'),
         '#default_value' => $settings['print_margins'],
       ],
       'show_invisibles' => [
         '#type' => 'checkbox',
-        '#title' => t('Show partially visible ... for better code matching'),
+        '#title' => t('Show invisible characters (whitespaces, EOL...)'),
         '#default_value' => $settings['show_invisibles'],
       ],
       'use_wrap_mode' => [
@@ -129,19 +197,18 @@ class AceFormatter extends FormatterBase {
     $settings = $this->getSettings();
 
     foreach ($items as $delta => $item) {
+
       $elements[$delta] = [
         '#type' => 'textarea',
         '#value' => $item->value,
         // Attach libraries as per the setting.
         '#attached' => [
           'library' => [
-            'ace_editor/formatter',
-            'ace_editor/theme.' . $settings['theme'],
-            'ace_editor/mode.' . $settings['syntax'],
+            'ace_editor/formatter'
           ],
           'drupalSettings' => [
              // Pass settings variable ace_formatter to javascript.
-            'ace_formatter' => $settings,
+            'ace_formatter' => $settings
           ],
         ],
         '#attributes' => [

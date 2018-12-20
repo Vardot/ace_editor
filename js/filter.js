@@ -32,7 +32,7 @@
 
                 editor.setOptions({
                     fontSize: ace_settings.font_size ? ace_settings.font_size : '12pt',
-                    showLineNumbers: ace_settings.line_numbers == null ? true : ace_settings.line_numbers,
+                    showLineNumbers: !!ace_settings.line_numbers,
                     showPrintMargin: !!ace_settings.print_margin,
                     showInvisibles: !!ace_settings.show_invisibles
                 });
