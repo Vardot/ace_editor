@@ -21,17 +21,9 @@
       "url": "https://asset-packagist.org"
     },
     {
-      "type": "package",
-      "package": {
-        "name": "ajaxorg/ace-builds",
-        "version": "1.4",
-        "type": "drupal-library",
-        "dist": {
-          "url": "https://github.com/ajaxorg/ace-builds/archive/v1.4.0.zip",
-          "type": "zip"
-        }
-      }
-    }
+      "type": "git",
+      "url": "https://github.com/ajaxorg/ace-builds.git"
+    },
   ],
   "require": {
     "ajaxorg/ace-builds": "~1.4.0"
