@@ -27,19 +27,48 @@ Installation
 ============
 
 a) Using Composer:
+
+    If you want Composer to automatically download the Ace Library
+    to the /libraries folder when installing the module, you must
+    update your root project composer.json in the following sections:
+
+      "extra" section: add the following:
+
+          "installer-types": [
+              "npm-asset"
+          ],
+          "installer-paths": {
+              "libraries/{$name}": [
+                  "type:drupal-library",
+                  "type:npm-asset"
+              ]
+          }
+
+      "repositories" section: add the following:
+
+          "assets": {
+              "type": "composer",
+              "url": "https://asset-packagist.org"
+          } 
     
+    (see details: https://www.drupal.org/docs/develop/using-composer/using-composer-to-install-drupal-and-manage-dependencies)
+
+
+    After the previous updates, run:
+
     $ composer require 'drupal/ace_editor:^1.0' 
 
     or
 
     $ composer require 'drupal/ace_editor:1.x-dev'
 
-    The Ace library will be downloaded to /libraries folder
+    The Ace library will be downloaded to the /libraries folder
     with '$ composer install/update'. Only one version 
     (minified, noconflict...) is required. Other folders 
     (including /demo) can be removed.
 
 b) Manually:
+    
     1. Download the latest version of the Ace Editor at
        https://github.com/ajaxorg/ace-builds/ or directly
        via https://github.com/ajaxorg/ace-builds/archive/master.zip
