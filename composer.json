@@ -28,7 +28,8 @@
   "require": {
     "composer/installers": "~1.0",
     "drupal/drupal-library-installer-plugin": "^0.3",
-    "npm-asset/ace-builds": "~1.0"
+    "npm-asset/ace-builds": "~1.0",
+    "oomphinc/composer-installers-extender": "^1.1"
   },
   "installer-types": [
     "bower-asset",
