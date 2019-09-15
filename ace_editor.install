@@ -11,10 +11,10 @@ function ace_editor_install() {
   $lib_path = ace_editor_lib_path();
 
   if (!$lib_path) {
-    drupal_set_message(t('Ace library is missing. Please download the more convenient version to you from <a href="@link">Ace Editor Page</a> and copy it under @path; Ace Editor module will use the first found version of ace.js located under @path.', ['@link' => 'https://github.com/ajaxorg/ace-builds', '@path' => '/libraries/']), 'warning');
+    \Drupal::messenger()->addMessage(t('Ace library is missing. Please download the more convenient version to you from <a href="@link">Ace Editor Page</a> and copy it under @path; Ace Editor module will use the first found version of ace.js located under @path.', ['@link' => 'https://github.com/ajaxorg/ace-builds', '@path' => '/libraries/']), 'warning');
   }
   else {
-    drupal_set_message(t('Ace library found at @location', ['@location' => $lib_path]));
+    \Drupal::messenger()->addMessage(t('Ace library found at @location', ['@location' => $lib_path]));
   }
 
 }
