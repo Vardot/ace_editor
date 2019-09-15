@@ -7,6 +7,8 @@ use Drupal\filter\FilterProcessResult;
 use Drupal\filter\Plugin\FilterBase;
 
 /**
+ *  Filters implementation for Ace Editor.
+ *
  * @Filter(
  *   id = "ace_filter",
  *   title = @Translation("Ace Filter"),
@@ -29,6 +31,9 @@ use Drupal\filter\Plugin\FilterBase;
  */
 class AceFilter extends FilterBase {
 
+  /**
+   * Setting form for filters.
+  */
   public function settingsForm(array $form, FormStateInterface $form_state) {
 
     $settings = $this->settings;
@@ -105,7 +110,7 @@ class AceFilter extends FilterBase {
   }
 
   /**
-   *
+   * Processing the filters and return the processed result.
    */
   public function process($text, $langcode) {
 
@@ -125,7 +130,7 @@ class AceFilter extends FilterBase {
         $settings = $this->getConfiguration()['settings'];
         $attach_lib = [];
 
-        foreach ($this->tag_attributes('ace', $value) as $attribute_key => $attribute_value) {
+        foreach ($this->tagAttributes('ace', $value) as $attribute_key => $attribute_value) {
           $settings[$attribute_key] = $attribute_value;
 
           if ($attribute_key == "theme" && \Drupal::service('library.discovery')->getLibraryByName('ace_editor', 'theme.' . $attribute_value)) {
@@ -141,7 +146,7 @@ class AceFilter extends FilterBase {
           'content' => $content,
           'settings' => $settings,
         ];
-        $text = $this->str_replace_once($value, $replace, $text);
+        $text = $this->strReplaceOnce($value, $replace, $text);
       }
 
       $result = new FilterProcessResult($text);
@@ -166,7 +171,7 @@ class AceFilter extends FilterBase {
   /**
    * Get all attributes of an <ace> tag in key/value pairs.
    */
-  public function tag_attributes($element_name, $xml) {
+  public function tagAttributes($element_name, $xml) {
     // Grab the string of attributes inside the editor tag.
     $found = preg_match('#<' . $element_name . '\s+([^>]+(?:"|\'))\s?/?>#', $xml, $matches);
 
@@ -198,7 +203,7 @@ class AceFilter extends FilterBase {
    *
    * Probably not the most efficient way, but at least it works.
    */
-  public function str_replace_once($needle, $replace, $haystack) {
+  public function strReplaceOnce($needle, $replace, $haystack) {
     // Looks for the first occurence of $needle in $haystack
     // and replaces it with $replace.
     $pos = strpos($haystack, $needle);

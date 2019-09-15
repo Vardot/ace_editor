@@ -49,8 +49,6 @@ class AceFormatter extends FormatterBase implements ContainerFactoryPluginInterf
    *   The view mode.
    * @param array $third_party_settings
    *   Any third party settings settings.
-   * @param \Drupal\Core\Entity\EntityManagerInterface $entity_manager
-   *   The entity manager.
    * @param \Drupal\Core\Render\RendererInterface $renderer
    *   The rendered service
    */
@@ -93,18 +91,17 @@ class AceFormatter extends FormatterBase implements ContainerFactoryPluginInterf
     $settings = $this->getSettings();
 
     $summary = [];
-    $summary[] = t('Theme: ') . $settings['theme'];
-    $summary[] = t('Syntax: ') . $settings['syntax'];
-    $summary[] = t('Height: ') . $settings['height'];
-    $summary[] = t('Width: ') . $settings['width'];
-    $summary[] = t('Font size: ') . $settings['font_size'];
-    $summary[] = t('Show line numbers: ') . ($settings['line_numbers'] ? t('On') : t('Off'));
-    $summary[] = t('Show print margin: ') . ($settings['print_margins'] ? t('On') : t('Off'));
-    $summary[] = t('Show invisible characters: ') . ($settings['show_invisibles'] ? t('On') : t('Off'));
-    $summary[] = t('Toggle word wrapping: ') . ($settings['use_wrap_mode'] ? t('On') : t('Off'));
+    $summary[] = t('Theme:') . ' ' . $settings['theme'];
+    $summary[] = t('Syntax:') . ' ' . $settings['syntax'];
+    $summary[] = t('Height:') . ' ' . $settings['height'];
+    $summary[] = t('Width:') . ' ' . $settings['width'];
+    $summary[] = t('Font size:') . ' ' . $settings['font_size'];
+    $summary[] = t('Show line numbers:') . ' ' . ($settings['line_numbers'] ? t('On') : t('Off'));
+    $summary[] = t('Show print margin:') . ' ' . ($settings['print_margins'] ? t('On') : t('Off'));
+    $summary[] = t('Show invisible characters:') . ' ' . ($settings['show_invisibles'] ? t('On') : t('Off'));
+    $summary[] = t('Toggle word wrapping:') . ' ' . ($settings['use_wrap_mode'] ? t('On') : t('Off'));
 
     return $summary;
-
   }
 
   /**
@@ -114,7 +111,7 @@ class AceFormatter extends FormatterBase implements ContainerFactoryPluginInterf
 
     $settings = $this->getSettings();
 
-    // $this->getSettings() will return values from defaultSettings() on first use.
+    // $this->getSettings() returns values from defaultSettings() on first use.
     // afterwards it will return the forms saved configuration.
     $config = \Drupal::config('ace_editor.settings');
 

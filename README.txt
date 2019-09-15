@@ -102,7 +102,8 @@ Edit HTML, PHP, YAML... in your entities and blocks like a pro
 
 Go to admin/config/content/formats, create/edit a Text format and select 'Ace'
 as the Text Editor. Afterwards, configura the Editor settings. Then head over to
-a block or entity containing a textarea with the correct text format and hack away!
+a block or entity containing a textarea with the correct text format and hack 
+away!
 
 Autocompletion
 --------------

@@ -1,10 +1,15 @@
 <?php
+ /**
+  * @file
+  * This file is used to write hooks that used in the module.
+  */
+
 /**
  * Verifies that Ace library is present.
- * The library is searched in the recommended directory for
- * storing external libraries under 8.x: DRUPAL_ROOT/libraries.
- * For preserving backwards compatibility, ace_editor/libraries
- * is also checked.
+ *
+ * The library is searched in the directory DRUPAL_ROOT/libraries.
+ * DRUPAL_ROOT/libraries is recommended for storing external libraries.
+ * For preserving backwards compatibility, ace_editor/libraries is also checked.
  */
 function ace_editor_lib_path() {
 
@@ -24,12 +29,11 @@ function ace_editor_lib_path() {
 }
 
 /**
- * Implements hook_library_info_build()
+ * Implements hook_library_info_build().
  *
  * Selects all theme and mode files from ace editor external library and add it
  * to drupal library.
  */
-
 function ace_editor_library_info_build() {
 
   $path = ace_editor_lib_path();
@@ -56,11 +60,8 @@ function ace_editor_library_info_build() {
   return $libs;
 }
 
-
 /**
  * Implements hook_library_info_alter().
- * @param array $libraries
- * @param string $extension
  */
 function ace_editor_library_info_alter(&$libraries, $extension) {
   if ($extension == 'ace_editor') {
