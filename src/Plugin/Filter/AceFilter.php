@@ -185,7 +185,7 @@ class AceFilter extends FilterBase {
         // with their values.
         foreach ($matches as $attribute) {
           $value = substr($attribute[2], 1, -1);
-          if ($value == "1" || $value == "0" || $value == "true" || $value == "false") {
+          if ($value == "1" || $value == "0" || $value == "TRUE" || $value == "FALSE") {
             $value = intval($value);
           }
           $attribute_array[str_replace('-', '_', $attribute[1])] = $value;
