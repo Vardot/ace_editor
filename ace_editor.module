@@ -20,7 +20,7 @@ function ace_editor_lib_path() {
     ];
 
   foreach ($paths_to_check as $path) {
-    $found = file_scan_directory(DRUPAL_ROOT . $path, '/^ace\.js/', ['recurse' => TRUE]);
+    $found = \Drupal::service('file_system')->scanDirectory(DRUPAL_ROOT . $path, '/^ace\.js/', ['recurse' => TRUE]);
     if ($found) {
       return substr(preg_replace('/ace\.js/', '', reset($found)->uri), strlen(DRUPAL_ROOT));
     }
@@ -39,7 +39,7 @@ function ace_editor_library_info_build() {
   $path = ace_editor_lib_path();
 
   // Collects all theme and mode files available.
-  $files = file_scan_directory(DRUPAL_ROOT . $path, '/(theme|mode)-(.+)\.js$/', ['recurse' => FALSE]);
+  $files = \Drupal::service('file_system')->scanDirectory(DRUPAL_ROOT . $path, '/(theme|mode)-(.+)\.js$/', ['recurse' => FALSE]);
 
   $libraries = [];
   foreach ($files as $file_info) {
