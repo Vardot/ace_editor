@@ -121,8 +121,8 @@ class AceEditor extends EditorBase {
   /**
    * {@inheritdoc}
    */
-  public function settingsForm(array $form, FormStateInterface $formState, Editor $editor) {
-
+  public function buildConfigurationForm(array $form, FormStateInterface $form_state) {
+    $editor = $form_state->get('editor');
     $settings = $editor->getSettings();
 
     $form = [];
@@ -155,7 +155,7 @@ class AceEditor extends EditorBase {
    */
   public function getLibraries(Editor $editor) {
     // Get default ace_editor configuration.
-    $config = $config = \Drupal::config('ace_editor.settings');
+    $config = \Drupal::config('ace_editor.settings');
 
     // Get theme and mode.
     $theme = trim($editor->getSettings()['fieldset']['theme']);
@@ -196,7 +196,13 @@ class AceEditor extends EditorBase {
   /**
    * {@inheritdoc}
    */
-  public function settingsFormSubmit(array $form, FormStateInterface $formState) {
+  public function validateConfigurationForm(array &$form, FormStateInterface $form_state) {
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function submitConfigurationForm(array &$form, FormStateInterface $form_state) {
     return $form;
   }
 
