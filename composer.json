@@ -19,17 +19,16 @@
     "drupal": {
       "type": "composer",
       "url": "https://packages.drupal.org/8"
-      },
+    },
     "assets": {
       "type": "composer",
       "url": "https://asset-packagist.org"
-     }
+    }
   },
   "require": {
-    "composer/installers": "~1.0",
-    "drupal/drupal-library-installer-plugin": "^0.3",
-    "npm-asset/ace-builds": "~1.0",
-    "oomphinc/composer-installers-extender": "^1.1"
+    "composer/installers": "~1.0 || ~2.0",
+    "oomphinc/composer-installers-extender": "~1.0 || ~2.0",
+    "npm-asset/ace-builds": "~1.0"
   },
   "extra": {
     "installer-types": [
@@ -41,7 +40,7 @@
     },
     "drupal-libraries": {
       "libraries": [
-          {"name": "ace", "package": "npm-asset/ace-builds"}
+        {"name": "ace", "package": "npm-asset/ace-builds"}
       ]
     }
   }
