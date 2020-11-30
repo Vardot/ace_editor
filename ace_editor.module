@@ -20,6 +20,10 @@ function ace_editor_lib_path() {
     ];
 
   foreach ($paths_to_check as $path) {
+    if (!is_dir(DRUPAL_ROOT . $path)) {
+      continue;
+    }
+
     $found = \Drupal::service('file_system')->scanDirectory(DRUPAL_ROOT . $path, '/^ace\.js/', ['recurse' => TRUE]);
     if ($found) {
       return substr(preg_replace('/ace\.js/', '', reset($found)->uri), strlen(DRUPAL_ROOT));
