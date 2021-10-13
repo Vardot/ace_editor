@@ -138,7 +138,7 @@ class AceFormatter extends FormatterBase implements ContainerFactoryPluginInterf
       ],
       'syntax' => [
         '#type' => 'select',
-        '#title' => $this->tt('Syntax'),
+        '#title' => $this->t('Syntax'),
         '#description' => $this->t('The syntax that will be highlighted.'),
         '#options' => $config->get('syntax_list'),
         '#attributes' => [
@@ -185,7 +185,7 @@ class AceFormatter extends FormatterBase implements ContainerFactoryPluginInterf
       ],
       'show_invisibles' => [
         '#type' => 'checkbox',
-        '#title' => $this->tt('Show invisible characters (whitespaces, EOL...)'),
+        '#title' => $this->t('Show invisible characters (whitespaces, EOL...)'),
         '#default_value' => $settings['show_invisibles'],
       ],
       'use_wrap_mode' => [

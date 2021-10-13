@@ -55,7 +55,7 @@ class AceEditor extends EditorBase {
       ],
       'syntax' => [
         '#type' => 'select',
-        '#title' => $this->tt('Syntax'),
+        '#title' => $this->t('Syntax'),
         '#description' => $this->t('The syntax that will be highlighted.'),
         '#options' => $config->get('syntax_list'),
         '#attributes' => [
