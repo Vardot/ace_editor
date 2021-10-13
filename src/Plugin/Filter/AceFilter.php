@@ -112,17 +112,26 @@ class AceFilter extends FilterBase {
    * Processing the filters and return the processed result.
    */
   public function process($text, $langcode) {
+    // Instantiate a static variable for js settings content.
+    // This allows multiple invocations of this method per page load to append
+    // as opposed to overwriting the data structure.
+    $js_settings = &drupal_static(__FUNCTION__);
 
     $text = html_entity_decode($text);
 
     if (preg_match_all("/<ace.*?>(.*?)\s*<\/ace>/s", $text, $match)) {
-      $js_settings = [
-        'instances' => [],
-        'theme_settings' => $this->getConfiguration()['settings'],
-      ];
+      // Stub out js settings data structure once per page load.
+      if (!isset($js_settings)) {
+        $js_settings = [
+          'instances' => [],
+          'theme_settings' => $this->getConfiguration()['settings'],
+        ];
+      }
 
       foreach ($match[0] as $key => $value) {
-        $element_id = 'ace-editor-inline' . $key;
+        // Generate a truly unique id to append as element ID.
+        $unique_id = uniqid();
+        $element_id = 'ace-editor-inline' . $unique_id;
         $content = trim($match[1][$key], "\n\r\0\x0B");
         $replace = '<pre id="' . $element_id . '"></pre>';
         // Override settings with attributes on the tag.
@@ -140,6 +149,7 @@ class AceFilter extends FilterBase {
           }
         }
 
+        // Append this instance to js settings data structure.
         $js_settings['instances'][] = [
           'id' => $element_id,
           'content' => $content,
