@@ -46,7 +46,7 @@ class AceEditor extends EditorBase {
     return [
       'theme' => [
         '#type' => 'select',
-        '#title' => t('Theme'),
+        '#title' => $this->t('Theme'),
         '#options' => $config->get('theme_list'),
         '#attributes' => [
           'style' => 'width: 150px;',
@@ -55,8 +55,8 @@ class AceEditor extends EditorBase {
       ],
       'syntax' => [
         '#type' => 'select',
-        '#title' => t('Syntax'),
-        '#description' => t('The syntax that will be highlighted.'),
+        '#title' => $this->tt('Syntax'),
+        '#description' => $this->t('The syntax that will be highlighted.'),
         '#options' => $config->get('syntax_list'),
         '#attributes' => [
           'style' => 'width: 150px;',
@@ -65,8 +65,8 @@ class AceEditor extends EditorBase {
       ],
       'height' => [
         '#type' => 'textfield',
-        '#title' => t('Height'),
-        '#description' => t('The height of the editor in either pixels or percents.'),
+        '#title' => $this->t('Height'),
+        '#description' => $this->t('The height of the editor in either pixels or percents.'),
         '#attributes' => [
           'style' => 'width: 100px;',
         ],
@@ -74,8 +74,8 @@ class AceEditor extends EditorBase {
       ],
       'width' => [
         '#type' => 'textfield',
-        '#title' => t('Width'),
-        '#description' => t('The width of the editor in either pixels or percents.'),
+        '#title' => $this->t('Width'),
+        '#description' => $this->t('The width of the editor in either pixels or percents.'),
         '#attributes' => [
           'style' => 'width: 100px;',
         ],
@@ -83,8 +83,8 @@ class AceEditor extends EditorBase {
       ],
       'font_size' => [
         '#type' => 'textfield',
-        '#title' => t('Font size'),
-        '#description' => t('The font size used in the editor.'),
+        '#title' => $this->t('Font size'),
+        '#description' => $this->t('The font size used in the editor.'),
         '#attributes' => [
           'style' => 'width: 100px;',
         ],
@@ -92,27 +92,27 @@ class AceEditor extends EditorBase {
       ],
       'line_numbers' => [
         '#type' => 'checkbox',
-        '#title' => t('Show line numbers'),
+        '#title' => $this->t('Show line numbers'),
         '#default_value' => $settings['line_numbers'],
       ],
       'print_margins' => [
         '#type' => 'checkbox',
-        '#title' => t('Show print margin (80 chars)'),
+        '#title' => $this->t('Show print margin (80 chars)'),
         '#default_value' => $settings['print_margins'],
       ],
       'show_invisibles' => [
         '#type' => 'checkbox',
-        '#title' => t('Show invisible characters (whitespaces, EOL...)'),
+        '#title' => $this->t('Show invisible characters (whitespaces, EOL...)'),
         '#default_value' => $settings['show_invisibles'],
       ],
       'use_wrap_mode' => [
         '#type' => 'checkbox',
-        '#title' => t('Toggle word wrapping'),
+        '#title' => $this->t('Toggle word wrapping'),
         '#default_value' => $settings['use_wrap_mode'],
       ],
       'auto_complete' => [
         '#type' => 'checkbox',
-        '#title' => t('Enable Autocomplete (Ctrl+Space'),
+        '#title' => $this->t('Enable Autocomplete (Ctrl+Space'),
         '#default_value' => isset($settings['auto_complete']) ? $settings['auto_complete'] : TRUE,
       ],
     ];
@@ -129,7 +129,7 @@ class AceEditor extends EditorBase {
 
     $form['fieldset'] = [
       '#type' => 'fieldset',
-      '#title' => t('Ace Editor Settings'),
+      '#title' => $this->t('Ace Editor Settings'),
       '#collapsable' => TRUE,
     ];
 
@@ -166,7 +166,7 @@ class AceEditor extends EditorBase {
     $mode_exist = \Drupal::service('library.discovery')->getLibraryByName('ace_editor', 'mode.' . $mode);
 
     // ace_editor/primary the basic library for ace_editor.
-    $libs = [ 'ace_editor/primary' ];
+    $libs = ['ace_editor/primary'];
 
     if ($theme_exist) {
       $libs[] = 'ace_editor/theme.' . $theme;

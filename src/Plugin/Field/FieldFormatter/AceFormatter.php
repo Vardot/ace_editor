@@ -8,8 +8,8 @@ use Drupal\Core\Field\FormatterBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Render\RendererInterface;
+use Drupal\Core\Config\ConfigFactory;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-
 
 /**
  * Plugin implementation of the 'ace_editor' formatter.
@@ -24,7 +24,14 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * )
  */
 class AceFormatter extends FormatterBase implements ContainerFactoryPluginInterface {
-  
+
+  /**
+   * The config_factory object.
+   *
+   * @var \Drupal\Core\Config\ConfigFactory
+   */
+  protected $configFactory;
+
   /**
    * The renderer service.
    *
@@ -50,13 +57,16 @@ class AceFormatter extends FormatterBase implements ContainerFactoryPluginInterf
    * @param array $third_party_settings
    *   Any third party settings settings.
    * @param \Drupal\Core\Render\RendererInterface $renderer
-   *   The rendered service
+   *   The rendered service.
+   * @param \Drupal\Core\Config\ConfigFactory $config_factory
+   *   The config factory.
    */
-  public function __construct($plugin_id, $plugin_definition, FieldDefinitionInterface $field_definition, array $settings, $label, $view_mode, array $third_party_settings, RendererInterface $renderer) {
+  public function __construct($plugin_id, $plugin_definition, FieldDefinitionInterface $field_definition, array $settings, $label, $view_mode, array $third_party_settings, RendererInterface $renderer, ConfigFactory $config_factory) {
 
     parent::__construct($plugin_id, $plugin_definition, $field_definition, $settings, $label, $view_mode, $third_party_settings);
 
     $this->renderer = $renderer;
+    $this->configFactory = $config_factory;
   }
 
   /**
@@ -71,7 +81,8 @@ class AceFormatter extends FormatterBase implements ContainerFactoryPluginInterf
       $configuration['label'],
       $configuration['view_mode'],
       $configuration['third_party_settings'],
-			$container->get('renderer')
+      $container->get('renderer'),
+      $container->get('config.factory')
     );
   }
 
@@ -80,7 +91,7 @@ class AceFormatter extends FormatterBase implements ContainerFactoryPluginInterf
    */
   public static function defaultSettings() {
     // Get default ace_editor configuration.
-    $config = \Drupal::config('ace_editor.settings')->get();
+    $config = $this->configFactory->get('ace_editor.settings');
     return $config + parent::defaultSettings();
   }
 
@@ -91,15 +102,15 @@ class AceFormatter extends FormatterBase implements ContainerFactoryPluginInterf
     $settings = $this->getSettings();
 
     $summary = [];
-    $summary[] = t('Theme:') . ' ' . $settings['theme'];
-    $summary[] = t('Syntax:') . ' ' . $settings['syntax'];
-    $summary[] = t('Height:') . ' ' . $settings['height'];
-    $summary[] = t('Width:') . ' ' . $settings['width'];
-    $summary[] = t('Font size:') . ' ' . $settings['font_size'];
-    $summary[] = t('Show line numbers:') . ' ' . ($settings['line_numbers'] ? t('On') : t('Off'));
-    $summary[] = t('Show print margin:') . ' ' . ($settings['print_margins'] ? t('On') : t('Off'));
-    $summary[] = t('Show invisible characters:') . ' ' . ($settings['show_invisibles'] ? t('On') : t('Off'));
-    $summary[] = t('Toggle word wrapping:') . ' ' . ($settings['use_wrap_mode'] ? t('On') : t('Off'));
+    $summary[] = $this->t('Theme:') . ' ' . $settings['theme'];
+    $summary[] = $this->t('Syntax:') . ' ' . $settings['syntax'];
+    $summary[] = $this->t('Height:') . ' ' . $settings['height'];
+    $summary[] = $this->t('Width:') . ' ' . $settings['width'];
+    $summary[] = $this->t('Font size:') . ' ' . $settings['font_size'];
+    $summary[] = $this->t('Show line numbers:') . ' ' . ($settings['line_numbers'] ? $this->t('On') : $this->t('Off'));
+    $summary[] = $this->t('Show print margin:') . ' ' . ($settings['print_margins'] ? $this->t('On') : $this->t('Off'));
+    $summary[] = $this->t('Show invisible characters:') . ' ' . ($settings['show_invisibles'] ? $this->t('On') : $this->t('Off'));
+    $summary[] = $this->t('Toggle word wrapping:') . ' ' . ($settings['use_wrap_mode'] ? $this->t('On') : $this->t('Off'));
 
     return $summary;
   }
@@ -113,12 +124,12 @@ class AceFormatter extends FormatterBase implements ContainerFactoryPluginInterf
 
     // $this->getSettings() returns values from defaultSettings() on first use.
     // afterwards it will return the forms saved configuration.
-    $config = \Drupal::config('ace_editor.settings');
+    $config = $this->configFactory->get('ace_editor.settings');
 
     return [
       'theme' => [
         '#type' => 'select',
-        '#title' => t('Theme'),
+        '#title' => $this->t('Theme'),
         '#options' => $config->get('theme_list'),
         '#attributes' => [
           'style' => 'width: 150px;',
@@ -127,8 +138,8 @@ class AceFormatter extends FormatterBase implements ContainerFactoryPluginInterf
       ],
       'syntax' => [
         '#type' => 'select',
-        '#title' => t('Syntax'),
-        '#description' => t('The syntax that will be highlighted.'),
+        '#title' => $this->tt('Syntax'),
+        '#description' => $this->t('The syntax that will be highlighted.'),
         '#options' => $config->get('syntax_list'),
         '#attributes' => [
           'style' => 'width: 150px;',
@@ -137,8 +148,8 @@ class AceFormatter extends FormatterBase implements ContainerFactoryPluginInterf
       ],
       'height' => [
         '#type' => 'textfield',
-        '#title' => t('Height'),
-        '#description' => t('The height of the editor in either pixels or percents.'),
+        '#title' => $this->t('Height'),
+        '#description' => $this->t('The height of the editor in either pixels or percents.'),
         '#attributes' => [
           'style' => 'width: 100px;',
         ],
@@ -146,8 +157,8 @@ class AceFormatter extends FormatterBase implements ContainerFactoryPluginInterf
       ],
       'width' => [
         '#type' => 'textfield',
-        '#title' => t('Width'),
-        '#description' => t('The width of the editor in either pixels or percents.'),
+        '#title' => $this->t('Width'),
+        '#description' => $this->t('The width of the editor in either pixels or percents.'),
         '#attributes' => [
           'style' => 'width: 100px;',
         ],
@@ -155,8 +166,8 @@ class AceFormatter extends FormatterBase implements ContainerFactoryPluginInterf
       ],
       'font_size' => [
         '#type' => 'textfield',
-        '#title' => t('Font size'),
-        '#description' => t('The the font size of the editor.'),
+        '#title' => $this->t('Font size'),
+        '#description' => $this->t('The the font size of the editor.'),
         '#attributes' => [
           'style' => 'width: 100px;',
         ],
@@ -164,25 +175,25 @@ class AceFormatter extends FormatterBase implements ContainerFactoryPluginInterf
       ],
       'line_numbers' => [
         '#type' => 'checkbox',
-        '#title' => t('Show line numbers'),
+        '#title' => $this->t('Show line numbers'),
         '#default_value' => $settings['line_numbers'],
       ],
       'print_margins' => [
         '#type' => 'checkbox',
-        '#title' => t('Show print margin (80 chars)'),
+        '#title' => $this->t('Show print margin (80 chars)'),
         '#default_value' => $settings['print_margins'],
       ],
       'show_invisibles' => [
         '#type' => 'checkbox',
-        '#title' => t('Show invisible characters (whitespaces, EOL...)'),
+        '#title' => $this->tt('Show invisible characters (whitespaces, EOL...)'),
         '#default_value' => $settings['show_invisibles'],
       ],
       'use_wrap_mode' => [
         '#type' => 'checkbox',
-        '#title' => t('Toggle word wrapping'),
+        '#title' => $this->t('Toggle word wrapping'),
         '#default_value' => $settings['use_wrap_mode'],
       ],
-     ];
+    ];
   }
 
   /**
@@ -201,15 +212,15 @@ class AceFormatter extends FormatterBase implements ContainerFactoryPluginInterf
         // Attach libraries as per the setting.
         '#attached' => [
           'library' => [
-            'ace_editor/formatter'
+            'ace_editor/formatter',
           ],
           'drupalSettings' => [
              // Pass settings variable ace_formatter to javascript.
-            'ace_formatter' => $settings
+            'ace_formatter' => $settings,
           ],
         ],
         '#attributes' => [
-          'class' => [ 'content' ],
+          'class' => ['content'],
           'readonly' => 'readonly',
         ],
         '#prefix' => '<div class="ace_formatter">',
@@ -218,4 +229,5 @@ class AceFormatter extends FormatterBase implements ContainerFactoryPluginInterf
     }
     return $elements;
   }
+
 }

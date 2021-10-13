@@ -7,7 +7,7 @@ use Drupal\filter\FilterProcessResult;
 use Drupal\filter\Plugin\FilterBase;
 
 /**
- *  Filters implementation for Ace Editor.
+ * Filters implementation for Ace Editor.
  *
  * @Filter(
  *   id = "ace_filter",
@@ -33,7 +33,7 @@ class AceFilter extends FilterBase {
 
   /**
    * Setting form for filters.
-  */
+   */
   public function settingsForm(array $form, FormStateInterface $form_state) {
 
     $settings = $this->settings;
@@ -42,7 +42,7 @@ class AceFilter extends FilterBase {
     return [
       'theme' => [
         '#type' => 'select',
-        '#title' => t('Theme'),
+        '#title' => $this->t('Theme'),
         '#options' => $config->get('theme_list'),
         '#attributes' => [
           'style' => 'width: 150px;',
@@ -51,8 +51,8 @@ class AceFilter extends FilterBase {
       ],
       'syntax' => [
         '#type' => 'select',
-        '#title' => t('Syntax'),
-        '#description' => t('The syntax that will be highlighted.'),
+        '#title' => $this->tt('Syntax'),
+        '#description' => $this->t('The syntax that will be highlighted.'),
         '#options' => $config->get('syntax_list'),
         '#attributes' => [
           'style' => 'width: 150px;',
@@ -61,8 +61,8 @@ class AceFilter extends FilterBase {
       ],
       'height' => [
         '#type' => 'textfield',
-        '#title' => t('Height'),
-        '#description' => t('The height of the editor in either pixels or percents.'),
+        '#title' => $this->t('Height'),
+        '#description' => $this->t('The height of the editor in either pixels or percents.'),
         '#attributes' => [
           'style' => 'width: 100px;',
         ],
@@ -70,8 +70,8 @@ class AceFilter extends FilterBase {
       ],
       'width' => [
         '#type' => 'textfield',
-        '#title' => t('Width'),
-        '#description' => t('The width of the editor in either pixels or percents.'),
+        '#title' => $this->t('Width'),
+        '#description' => $this->t('The width of the editor in either pixels or percents.'),
         '#attributes' => [
           'style' => 'width: 100px;',
         ],
@@ -79,8 +79,8 @@ class AceFilter extends FilterBase {
       ],
       'font_size' => [
         '#type' => 'textfield',
-        '#title' => t('Font size'),
-        '#description' => t('The the font size of the editor.'),
+        '#title' => $this->t('Font size'),
+        '#description' => $this->t('The the font size of the editor.'),
         '#attributes' => [
           'style' => 'width: 100px;',
         ],
@@ -88,22 +88,22 @@ class AceFilter extends FilterBase {
       ],
       'line_numbers' => [
         '#type' => 'checkbox',
-        '#title' => t('Show line numbers'),
+        '#title' => $this->t('Show line numbers'),
         '#default_value' => $settings['line_numbers'],
       ],
       'print_margins' => [
         '#type' => 'checkbox',
-        '#title' => t('Show print margin (80 chars)'),
+        '#title' => $this->t('Show print margin (80 chars)'),
         '#default_value' => $settings['print_margins'],
       ],
       'show_invisibles' => [
         '#type' => 'checkbox',
-        '#title' => t('Show invisible characters (whitespaces, EOL...)'),
+        '#title' => $this->t('Show invisible characters (whitespaces, EOL...)'),
         '#default_value' => $settings['show_invisibles'],
       ],
       'use_wrap_mode' => [
         '#type' => 'checkbox',
-        '#title' => t('Toggle word wrapping'),
+        '#title' => $this->t('Toggle word wrapping'),
         '#default_value' => $settings['use_wrap_mode'],
       ],
     ];
@@ -213,4 +213,5 @@ class AceFilter extends FilterBase {
     }
     return substr_replace($haystack, $replace, $pos, strlen($needle));
   }
+
 }
