@@ -4,7 +4,6 @@ primary:
   version: VERSION
   js:
     js/editor.js: {}
-
   css:
     component:
       styles/editor.css: {}
@@ -17,7 +16,6 @@ formatter:
   version: VERSION
   js:
     js/formatter.js: {}
-
   css:
     component:
       styles/editor.css: {}
@@ -30,7 +28,6 @@ filter:
   version: VERSION
   js:
     js/filter.js: {}
-
   css:
     component:
       styles/editor.css: {}

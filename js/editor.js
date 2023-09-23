@@ -24,7 +24,7 @@
 
             // We introduce a dummy dom element to make our editor and attach inside form textarea wrapper.
             var editor_dummy = "<pre id='"+ace_editor_id+"'></pre>";
-            $element.closest(".form-textarea-wrapper").append(editor_dummy);
+            $element.closest(".js-form-type-textarea").append(editor_dummy);
 
             // Creating new editor, setting syntax and theme.
             var current_editor = editors[ace_editor_id] = ace.edit(ace_editor_id);
