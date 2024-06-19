@@ -11,6 +11,7 @@ primary:
     - core/jquery
     - core/drupal
     - core/drupalSettings
+    - editor/drupal.editor
 
 formatter:
   version: VERSION
