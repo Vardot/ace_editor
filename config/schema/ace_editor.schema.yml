@@ -1,7 +1,7 @@
 # Schema for the configuration files of the ace_editor module.
 
-filter_settings.ace_filter:
-  type: mapping
+ace_editor.settings:
+  type: config_object
   label: 'ACE editor settings'
   mapping:
     theme_list:
@@ -43,9 +43,9 @@ filter_settings.ace_filter:
       type: boolean
       label: 'Use wrap mode'
 
-ace_editor.settings:
-  type: filter_settings.ace_filter
-  label: 'Ace editor settings'
+filter_settings.ace_filter:
+  type: mapping
+  label: 'ACE editor filter settings'
   mapping:
     theme_list:
       type: sequence
@@ -55,6 +55,34 @@ ace_editor.settings:
       type: sequence
       sequence:
         type: string
-    fieldset:
-      type: filter_settings.ace_filter
-      label: 'Fieldset'
+    theme:
+      type: string
+      label: 'Theme'
+    syntax:
+      type: string
+      label: 'Syntax'
+    height:
+      type: string
+      label: 'Height'
+    width:
+      type: string
+      label: 'Width'
+    font_size:
+      type: string
+      label: 'Font size'
+    line_numbers:
+      type: boolean
+      label: 'Line numbers'
+    show_invisibles:
+      type: boolean
+      label: 'Show invisible'
+    print_margins:
+      type: boolean
+      label: 'Print margins'
+    auto_complete:
+      type: boolean
+      label: 'Autocomplete'
+    use_wrap_mode:
+      type: boolean
+      label: 'Use wrap mode'
+
