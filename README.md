@@ -44,6 +44,14 @@ composer config --unset extra.installer-paths.web\/libraries\/\{\$name\}
 composer config --json extra.installer-paths.web\/libraries\/\{\$name\} '["type:drupal-library", "type:bower-asset", "type:npm-asset"]'
 ```
 
+Download the ACE Builds library. or require it by composer with.
+```
+composer require npm-asset/ace-builds:~1.0
+```
+
+Better to get the library from https://www.npmjs.com/package/ace-builds
+
+
 Download the ACE Editor module and install it:
 
 ```
