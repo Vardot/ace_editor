@@ -40,9 +40,14 @@ function ace_editor_lib_path() {
     '/libraries/ace',
     '/libraries/ace-builds',
     '/' . \Drupal::service('extension.list.module')->getPath('ace_editor') . '/libraries',
-    '/' . \Drupal::service('extension.list.profile')->getPath(\Drupal::installProfile()) . '/libraries/ace',
   ];
 
+  // Add profile path only if a profile is configured.
+  $install_profile = \Drupal::installProfile();
+  if ($install_profile) {
+    $paths_to_check[] = '/' . \Drupal::service('extension.list.profile')->getPath($install_profile) . '/libraries/ace';
+  }
+ 
   foreach ($paths_to_check as $path) {
     if (!is_dir(DRUPAL_ROOT . $path)) {
       continue;
