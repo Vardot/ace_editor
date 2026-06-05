@@ -43,10 +43,17 @@
 
             // Setting ace_editor styles.
             $("#"+ace_editor_id).height(format.editorSettings.height).width(format.editorSettings.width);
+            // The configuration key is `print_margins`; older inline <ace> tags
+            // use the `print-margin` attribute (normalised to `print_margin`).
+            // Honour whichever is present so both paths show the print margin.
+            var showPrintMargin = format.editorSettings.print_margins;
+            if (showPrintMargin === undefined) {
+              showPrintMargin = format.editorSettings.print_margin;
+            }
             editors[ace_editor_id].setOptions({
                 fontSize: format.editorSettings.font_size ? format.editorSettings.font_size : '12pt',
                 showLineNumbers: format.editorSettings.line_numbers ? true : false,
-                showPrintMargin: format.editorSettings.print_margin ? true: false,
+                showPrintMargin: showPrintMargin ? true: false,
                 showInvisibles: format.editorSettings.show_invisibles ? true: false,
                 enableBasicAutocompletion: format.editorSettings.auto_complete ? true: false
             });

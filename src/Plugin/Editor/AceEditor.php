@@ -112,8 +112,8 @@ class AceEditor extends EditorBase {
       ],
       'auto_complete' => [
         '#type' => 'checkbox',
-        '#title' => $this->t('Enable Autocomplete (Ctrl+Space'),
-        '#default_value' => isset($settings['auto_complete']) ? $settings['auto_complete'] : TRUE,
+        '#title' => $this->t('Enable Autocomplete (Ctrl+Space)'),
+        '#default_value' => $settings['auto_complete'] ?? TRUE,
       ],
     ];
   }

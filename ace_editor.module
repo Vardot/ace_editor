@@ -4,6 +4,7 @@
  * @file
  * This file is used to write hooks that used in the module.
  */
+
 use Drupal\Core\Routing\RouteMatchInterface;
 
 /**
@@ -16,7 +17,7 @@ function ace_editor_help($route_name, RouteMatchInterface $route_match) {
       $output = '';
       $output .= '<h3>' . t('About') . '</h3>';
       $output .= '<p>' . t('Ace is a code editor written in JavaScript, allowing you to edit HTML, PHP and JavaScript (and more). It provides syntax highlighting, proper indentation, keyboard shortcuts, find and replace (including regular expressions).') . '</p>';
-      $output .= '<p>' . t('This module integrates the Ace editor into Drupal\'s node/block edit forms, for editing raw HTML, PHP, JS, etc... in a familiar way..') . '</p>';
+      $output .= '<p>' . t("This module integrates the Ace editor into Drupal's node/block edit forms, for editing raw HTML, PHP, JS, etc... in a familiar way..") . '</p>';
       $output .= '<p>' . t('It supports:') . '</p>';
       $output .= '<ul>' . t('<li>node edit forms, including summary</li>') . '</ul>';
       $output .= '<ul>' . t('<li>blocks edit forms</li>') . '</ul>';
@@ -47,7 +48,7 @@ function ace_editor_lib_path() {
   if ($install_profile) {
     $paths_to_check[] = '/' . \Drupal::service('extension.list.profile')->getPath($install_profile) . '/libraries/ace';
   }
- 
+
   foreach ($paths_to_check as $path) {
     if (!is_dir(DRUPAL_ROOT . $path)) {
       continue;

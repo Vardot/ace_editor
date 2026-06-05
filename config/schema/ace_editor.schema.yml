@@ -85,4 +85,3 @@ filter_settings.ace_filter:
     use_wrap_mode:
       type: boolean
       label: 'Use wrap mode'
-
