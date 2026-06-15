@@ -53,6 +53,6 @@ No. The field formatter and the text filter both render **read-only** editors �
 they are for display only. Only the text-editor integration on edit forms is
 editable.
 
-## Does it work with Drupal 10 and 11?
+## Does it work with Drupal 10, 11 and 12?
 
-Yes — the module requires Drupal core `^10 || ^11`.
+Yes — the module requires Drupal core `^10 || ^11 || ^12`.
