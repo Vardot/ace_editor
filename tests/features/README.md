@@ -1,6 +1,6 @@
 # Features
 
-webship-js BDD scenarios for the Ace Editor module, numbered by area:
+varbase-e2e BDD scenarios for the Ace Editor module, numbered by area:
 
 - `01-*` — setup (login + user provisioning) and smoke.
 - `02-*` — the text editor on forms (attach, textarea sync, print margin, settings form).

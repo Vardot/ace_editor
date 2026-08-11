@@ -1,27 +1,12 @@
 'use strict';
 
-/**
- * @file
- * Custom step definitions for the Ace Editor module test suite.
- *
- * Mirrors the sibling Vardot/Webship modules: every step drives the site
- * through the browser only - no Drush, no shell. The suite exercises the three
- * surfaces the module exposes the Ace code editor through:
- *
- *   - js/editor.js   -> Drupal.editors.ace_editor   (text editor on forms)
- *   - js/formatter.js-> Drupal.behaviors.ace_formatter (read-only field display)
- *   - js/filter.js   -> Drupal.behaviors.ace_filter  (<ace> snippets in text)
- *
- * Navigation and waiting reuse webship-js's own helpers (gotoUrl, waitForPageLoad)
- * and failures are wrapped with friendly().
- */
-
 const { Given, Then, When } = require('@cucumber/cucumber');
+
 const {
   friendly,
   gotoUrl,
   waitForPageLoad,
-} = require('webship-js/tests/step-definitions/webship');
+} = require('@vardot/varbase-e2e/tests/step-definitions/varbase-e2e');
 
 /**
  * Run a step body and rethrow any failure as a tester-friendly error.
@@ -33,36 +18,6 @@ async function attempt(body, message) {
     throw friendly(message, err);
   }
 }
-
-/* -------------------------------------------------------------------------
- * Authentication / provisioning (shared phrasing across Vardot modules).
- * ---------------------------------------------------------------------- */
-
-/**
- * Log in as a named test user defined in cucumber.js worldParameters.users.
- *
- * Example: Given I am a logged in user with the "Webmaster" user
- */
-Given(/^I am a logged in user with( the)*( username)* "([^"]*)?"( user)?$/, async function (theCase, usernameCase, key, userCase) {
-  const users = this.parameters.users || {};
-  if (!(key in users)) {
-    throw new Error(`No user named "${key}" in cucumber.js worldParameters.users`);
-  }
-  const { username, password } = users[key];
-  if (!username || !password) {
-    throw new Error(`User "${key}" is missing username or password in worldParameters.users`);
-  }
-  await attempt(async () => {
-    await this.context.clearCookies();
-    await gotoUrl(this.page, `${this.parameters.launchUrl}/user/login`);
-    await this.page.locator('#edit-name').fill(username);
-    await this.page.locator('#edit-pass').fill(password);
-    // Scope to the login form: the page also carries a search block whose
-    // submit shares the #edit-submit id.
-    await this.page.locator('#user-login-form input[value="Log in"]').click();
-    await waitForPageLoad(this.page, this.minWaitTime && this.minWaitTime.page);
-  }, `Could not log in as "${key}"`);
-});
 
 /**
  * Provision every non-admin user from worldParameters.users via
@@ -93,12 +48,8 @@ Given(/^(?:I |we )?add( the)? testing users$/, async function (theCase) {
   }, 'Could not provision the testing users');
 });
 
-/* -------------------------------------------------------------------------
- * Generic named-selector assertions (shared phrasing across Vardot modules).
- * ---------------------------------------------------------------------- */
-
 /**
- * Resolve a webship-js named selector from the world registry, suggesting the
+ * Resolve a varbase-e2e named selector from the world registry, suggesting the
  * closest registered name on a typo instead of dumping the whole catalogue.
  */
 function resolveName(world, name) {
@@ -249,10 +200,6 @@ Then(/^the "([^"]*)" element should have the computed style "([^"]*)" of "([^"]*
   }, `Expected "${name}" (${sel}) computed ${property} to be "${value}"`);
 });
 
-/* =======================================================================
- * Ace Editor specific steps.
- * ==================================================================== */
-
 /**
  * Assert the global Ace library object is available on the page.
  *
@@ -363,7 +310,7 @@ When(/^(?:I |we )?type "([^"]*)" into the Ace editor$/, async function (text) {
  * Assert a named form field (textarea/input) currently holds the given value.
  *
  * Uses a distinct phrasing ("field value should contain") and an evaluate-based
- * read so it works against the Ace-hidden textarea, where webship-js's built-in
+ * read so it works against the Ace-hidden textarea, where varbase-e2e's built-in
  * visible-field assertion would not apply.
  *
  * Example: Then the "body textarea" field value should contain "<h2>Synced</h2>"

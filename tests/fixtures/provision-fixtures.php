@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Provision the fixtures the Ace Editor webship-js scenarios rely on.
+ * Provision the fixtures the Ace Editor varbase-e2e scenarios rely on.
  *
  * Run once, after the module and its dependencies are enabled, with
  * "drush scr tests/fixtures/provision-fixtures.php".
@@ -22,8 +22,31 @@
  */
 
 use Drupal\editor\Entity\Editor;
+use Drupal\field\Entity\FieldConfig;
+use Drupal\field\Entity\FieldStorageConfig;
 use Drupal\filter\Entity\FilterFormat;
 use Drupal\node\Entity\Node;
+use Drupal\node\Entity\NodeType;
+
+// Core 11.4 standard no longer ships the article/page content types; create
+// what the fixtures below assume.
+$ensure_type = function (string $type, string $name): void {
+  if (!NodeType::load($type)) {
+    NodeType::create(["type" => $type, "name" => $name, "display_submitted" => FALSE])->save();
+    print "node type $type: created\n";
+  }
+  if (!FieldStorageConfig::loadByName("node", "body")) {
+    FieldStorageConfig::create(["field_name" => "body", "entity_type" => "node", "type" => "text_with_summary"])->save();
+  }
+  if (!FieldConfig::loadByName("node", $type, "body")) {
+    FieldConfig::create(["field_name" => "body", "entity_type" => "node", "bundle" => $type, "label" => "Body"])->save();
+    $r = \Drupal::service("entity_display.repository");
+    $r->getFormDisplay("node", $type)->setComponent("body", ["type" => "text_textarea_with_summary"])->save();
+    $r->getViewDisplay("node", $type)->setComponent("body", ["type" => "text_default", "label" => "hidden"])->save();
+  }
+};
+$ensure_type("article", "Article");
+$ensure_type("page", "Basic page");
 
 $shared_settings = [
   'theme' => 'cobalt',

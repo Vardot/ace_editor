@@ -4,11 +4,11 @@
 # Two halves:
 #   1. The standard Drupal CI validation jobs (composer-lint, cspell, eslint,
 #      phpcs, phpstan, phpunit) provided by the drupalci templates.
-#   2. A webship-js BDD browser-test job (Playwright + Cucumber-js) that runs
+#   2. A varbase-e2e BDD browser-test job (Playwright + Cucumber-js) that runs
 #      the `tests/features/**` suite against a freshly installed Drupal
 #      Standard site with the module enabled and the Ace library downloaded.
 #
-# The webship-js suite drives the site entirely through the browser. The first
+# The varbase-e2e suite drives the site entirely through the browser. The first
 # feature (01-01-01-users-login) logs in as the Webmaster and provisions the
 # per-role testing users; the editor / formatter / filter configuration and the
 # demo content are provisioned by tests/fixtures/provision-fixtures.php in the
@@ -70,15 +70,15 @@ phpunit:
     - apt-get install -y nodejs
     - node --version && npm --version
     - 'test -f .yarnrc.yml || echo "nodeLinker: node-modules" > .yarnrc.yml'
-    # Back up cucumber.js - webship-js's postinstall can clobber it under yarn 4.
+    # Back up cucumber.js - varbase-e2e's postinstall can clobber it under yarn 4.
     - cp cucumber.js .cucumber.js.bak
     - corepack enable
     - yarn install
     - cp .cucumber.js.bak cucumber.js && rm .cucumber.js.bak
     - ./node_modules/.bin/playwright install --with-deps chromium
 
-# = webship-js BDD - Drupal Standard profile =
-webship-js-test:
+# = varbase-e2e BDD - Drupal Standard profile =
+varbase-e2e-test:
   extends: .testing-job-base
   needs: [composer]
   # Override the parent's services - we only need the database. Playwright
@@ -115,11 +115,11 @@ webship-js-test:
     - $CI_PROJECT_DIR/vendor/bin/drush --root=$CI_PROJECT_DIR/$_WEB_ROOT cache:rebuild
     - !reference [.fragments, node_playwright]
   script:
-    # cucumber.js loads only `tests/features/**`. Disable webship-js's
+    # cucumber.js loads only `tests/features/**`. Disable varbase-e2e's
     # auto HTML hook and run `generate-reports` explicitly after cucumber-js so
     # both HTML and PDF land next to the JSON in `tests/reports/`.
-    - WEBSHIP_REPORT_DISABLE=1 ./node_modules/.bin/cucumber-js --config cucumber.js --tags "not @wip"
-    - node ./node_modules/webship-js/bin/generate-reports.js
+    - VARBASE_E2E_REPORT_DISABLE=1 ./node_modules/.bin/cucumber-js --config cucumber.js --tags "not @wip"
+    - node ./node_modules/@vardot/varbase-e2e/bin/generate-reports.js
         --json tests/reports/cucumber_report.json
         --out  tests/reports/cucumber_report.html
         --format all
