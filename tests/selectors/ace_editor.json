@@ -33,7 +33,8 @@
     "ace autocomplete label": "label:has-text('Enable Autocomplete (Ctrl+Space)')",
     "filter ace tips": ".filter-help, .filter-guidelines, details:has-text('Ace Filter')",
     "save configuration button": "#edit-submit, input[value='Save configuration']",
-    "ace search box": ".js-form-type-textarea .ace_editor .ace_search"
+    "ace search box": ".js-form-type-textarea .ace_editor .ace_search",
+    "ace editor readonly input": ".js-form-type-textarea .ace_editor textarea.ace_text-input[readonly]"
   },
   "xpath": {}
 }

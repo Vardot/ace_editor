@@ -104,11 +104,19 @@ varbase-e2e-test:
   before_script:
     - !reference [.fragments, web_db]
     - !reference [.fragments, ace_library]
+    # The composer job installs Drush on a best-effort basis: it warns and
+    # exits 0 when GitHub cannot be reached, and this job then dies on a
+    # missing binary with no clue why. Install it here when it is absent.
+    - if [ ! -x "$CI_PROJECT_DIR/vendor/bin/drush" ]; then echo "Drush missing from the composer artifact, installing it."; composer --working-dir="$CI_PROJECT_DIR" require --dev --no-interaction --no-progress drush/drush:^13; fi
+    - test -x "$CI_PROJECT_DIR/vendor/bin/drush" || { echo "Drush could not be installed; the functional suite cannot run."; exit 1; }
     - $CI_PROJECT_DIR/vendor/bin/drush --root=$CI_PROJECT_DIR/$_WEB_ROOT site:install standard
         --db-url=$SIMPLETEST_DB --account-name=webmaster --account-pass=dD.123123ddd
         --site-name="Ace Editor Test" -y
     # Enable the module (provides the editor, formatter and filter plugins).
-    - $CI_PROJECT_DIR/vendor/bin/drush --root=$CI_PROJECT_DIR/$_WEB_ROOT en -y ace_editor
+    # Make the tests/modules/ helper discoverable by drush en.
+    - chmod 644 $CI_PROJECT_DIR/$_WEB_ROOT/sites/default/settings.php
+    - echo '$settings["extension_discovery_scan_tests"] = TRUE;' >> $CI_PROJECT_DIR/$_WEB_ROOT/sites/default/settings.php
+    - $CI_PROJECT_DIR/vendor/bin/drush --root=$CI_PROJECT_DIR/$_WEB_ROOT en -y ace_editor ace_editor_test
     # Provision the editor / filter / formatter config and the demo content the
     # scenarios assert against.
     - $CI_PROJECT_DIR/vendor/bin/drush --root=$CI_PROJECT_DIR/$_WEB_ROOT scr $CI_PROJECT_DIR/tests/fixtures/provision-fixtures.php

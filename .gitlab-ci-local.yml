@@ -122,7 +122,10 @@ varbase-e2e-test:
     - cp -a /tmp/ace-builds/src-min-noconflict web/libraries/ace/
     # --- Install + enable + provide test fixtures --------------------------
     - vendor/bin/drush site:install standard --db-url="$DB_URL" --account-name=webmaster --account-pass=dD.123123ddd --site-name="Ace Editor Test" -y
-    - vendor/bin/drush en -y ace_editor
+    # Make the tests/modules/ helper discoverable by drush en.
+    - chmod 644 web/sites/default/settings.php
+    - echo '$settings["extension_discovery_scan_tests"] = TRUE;' >> web/sites/default/settings.php
+    - vendor/bin/drush en -y ace_editor ace_editor_test
     # drush scr resolves the path relative to cwd, so run it from inside $SITE.
     - cp "$CI_PROJECT_DIR/tests/fixtures/provision-fixtures.php" "$SITE/provision-fixtures.php"
     - vendor/bin/drush scr provision-fixtures.php

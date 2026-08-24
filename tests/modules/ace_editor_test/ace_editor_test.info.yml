@@ -1,0 +1,8 @@
+name: 'Ace Editor Test'
+type: module
+description: 'Test helper that disables a field on demand for the Ace Editor functional tests.'
+package: Testing
+core_version_requirement: ^10.1 || ^11 || ^12
+hidden: true
+dependencies:
+  - drupal:ace_editor

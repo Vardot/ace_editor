@@ -363,3 +363,45 @@ When(/^(?:I |we )?press the "([^"]*)" key in the "([^"]*)" element$/, async func
     await this.page.keyboard.press(key);
   }, `Could not press "${key}" in the "${name}" element`);
 });
+
+/**
+ * Type into the Ace editor the way a person does: focus its hidden text input
+ * and press keys. Unlike a programmatic session.setValue(), this is what a
+ * read-only editor is supposed to refuse (issue #3046914).
+ *
+ * Example: When I type "abc" into the Ace editor with the keyboard
+ */
+When(/^(?:I |we )?type "([^"]*)" into the Ace editor with the keyboard$/, async function (text) {
+  await attempt(async () => {
+    const input = this.page.locator('.js-form-type-textarea .ace_editor textarea.ace_text-input').first();
+    await input.waitFor({ state: 'attached', timeout: 15000 });
+    await this.page.locator('.js-form-type-textarea .ace_editor').first().click();
+    await this.page.keyboard.type(text);
+    // js/editor.js debounces the textarea sync by 400ms.
+    await this.page.waitForTimeout(700);
+  }, `Could not type "${text}" into the Ace editor with the keyboard`);
+});
+
+/**
+ * Assert the text currently held by the Ace editor session.
+ *
+ * Example: Then the Ace editor content should not contain "abc"
+ */
+Then(/^the Ace editor content should( not)? contain "([^"]*)"$/, async function (negated, text) {
+  await attempt(async () => {
+    const content = await this.page.evaluate(() => {
+      const pre = document.querySelector('pre[id$="-ace-editor"]');
+      return (pre && window.ace) ? window.ace.edit(pre.id).getValue() : null;
+    });
+    if (content === null) {
+      throw new Error('No Ace editor was found on the page.');
+    }
+    const contains = content.includes(text);
+    if (negated && contains) {
+      throw new Error(`Expected the Ace editor content not to contain "${text}", but it did.`);
+    }
+    if (!negated && !contains) {
+      throw new Error(`Expected the Ace editor content to contain "${text}", but it did not.`);
+    }
+  }, `Could not verify the Ace editor content`);
+});

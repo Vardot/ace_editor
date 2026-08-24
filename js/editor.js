@@ -67,6 +67,14 @@
               editors[ace_editor_id].getSession().setUseWrapMode(true);
             }
 
+            // A form can disable a field, and Drupal renders that as a
+            // disabled or readonly textarea. Ace hides the textarea and takes
+            // over the editing, so without this the field stays editable
+            // through the editor (issue #3046914).
+            if (element.disabled || element.readOnly) {
+              current_editor.setReadOnly(true);
+            }
+
             return !!current_editor;
             
         },
