@@ -162,8 +162,9 @@ class AceEditor extends EditorBase {
     $config = \Drupal::config('ace_editor.settings');
 
     // Get theme and mode.
-    $theme = trim($editor->getSettings()['fieldset']['theme']);
-    $mode = trim($editor->getSettings()['fieldset']['syntax']);
+    $settings = $this->instanceSettings($editor);
+    $theme = trim((string) ($settings['theme'] ?? ''));
+    $mode = trim((string) ($settings['syntax'] ?? ''));
 
     // Check if theme and mode library exist.
     $theme_exist = \Drupal::service('library.discovery')->getLibraryByName('ace_editor', 'theme.' . $theme);
@@ -193,20 +194,29 @@ class AceEditor extends EditorBase {
    * {@inheritdoc}
    */
   public function getJsSettings(Editor $editor) {
+    return $this->instanceSettings($editor);
+  }
+
+  /**
+   * Returns the settings of one editor instance.
+   *
+   * Settings saved through the configuration form are nested under "fieldset",
+   * while configuration created programmatically - by a recipe, a config
+   * import, or an older release - keeps them at the top level.
+   *
+   * @param \Drupal\editor\Entity\Editor $editor
+   *   The text editor whose settings to read.
+   *
+   * @return array
+   *   The instance settings, flattened, with the defaults filled in.
+   */
+  protected function instanceSettings(Editor $editor): array {
     $settings = $editor->getSettings();
 
-    // Settings saved through the configuration form are nested under
-    // "fieldset", while configuration created programmatically - by a recipe,
-    // a config import, or an older release - keeps them at the top level.
-    // Both shapes have to produce usable settings, otherwise the editor is
-    // handed a NULL and never attaches (the JavaScript then fails on
-    // format.editorSettings).
     if (isset($settings['fieldset']) && is_array($settings['fieldset'])) {
       $settings = $settings['fieldset'];
     }
 
-    // Fill in anything the stored configuration does not carry, so every
-    // setting the JavaScript reads is always present.
     return $settings + $this->getDefaultSettings();
   }
 
