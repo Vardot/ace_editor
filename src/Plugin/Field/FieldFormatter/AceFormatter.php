@@ -90,8 +90,12 @@ class AceFormatter extends FormatterBase implements ContainerFactoryPluginInterf
    * {@inheritdoc}
    */
   public static function defaultSettings() {
-    // Get default ace_editor configuration.
+    // Get default ace_editor configuration, without the option sources of the
+    // settings form: Drupal merges default settings into the saved display,
+    // so theme_list and syntax_list would be written into every
+    // core.entity_view_display.* configuration (issue #3618752).
     $config = \Drupal::config('ace_editor.settings')->get();
+    $config = array_diff_key($config, array_flip(['theme_list', 'syntax_list', '_core']));
     return $config + parent::defaultSettings();
   }
 

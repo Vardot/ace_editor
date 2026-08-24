@@ -36,29 +36,34 @@
 
             // Creating new editor, setting syntax and theme.
             var current_editor = editors[ace_editor_id] = ace.edit(ace_editor_id);
-            var theme = format.editorSettings["theme"];
-            var mode = format.editorSettings["syntax"];
+            // Core delivers the format over AJAX when the text format select
+            // changes, and a text format whose stored settings are empty
+            // arrives with editorSettings set to null. Fall back to defaults
+            // so the editor still attaches instead of throwing.
+            var settings = format.editorSettings || {};
+            var theme = settings["theme"] || "chrome";
+            var mode = settings["syntax"] || "html";
             editors[ace_editor_id].setTheme("ace/theme/"+theme);
             editors[ace_editor_id].getSession().setMode("ace/mode/"+mode);
 
             // Setting ace_editor styles.
-            $("#"+ace_editor_id).height(format.editorSettings.height).width(format.editorSettings.width);
+            $("#"+ace_editor_id).height(settings.height || "300px").width(settings.width || "100%");
             // The configuration key is `print_margins`; older inline <ace> tags
             // use the `print-margin` attribute (normalised to `print_margin`).
             // Honour whichever is present so both paths show the print margin.
-            var showPrintMargin = format.editorSettings.print_margins;
+            var showPrintMargin = settings.print_margins;
             if (showPrintMargin === undefined) {
-              showPrintMargin = format.editorSettings.print_margin;
+              showPrintMargin = settings.print_margin;
             }
             editors[ace_editor_id].setOptions({
-                fontSize: format.editorSettings.font_size ? format.editorSettings.font_size : '12pt',
-                showLineNumbers: format.editorSettings.line_numbers ? true : false,
+                fontSize: settings.font_size ? settings.font_size : '12pt',
+                showLineNumbers: settings.line_numbers ? true : false,
                 showPrintMargin: showPrintMargin ? true: false,
-                showInvisibles: format.editorSettings.show_invisibles ? true: false,
-                enableBasicAutocompletion: format.editorSettings.auto_complete ? true: false
+                showInvisibles: settings.show_invisibles ? true: false,
+                enableBasicAutocompletion: settings.auto_complete ? true: false
             });
 
-            if (format.editorSettings.use_wrap_mode) {
+            if (settings.use_wrap_mode) {
               editors[ace_editor_id].getSession().setUseWrapMode(true);
             }
 

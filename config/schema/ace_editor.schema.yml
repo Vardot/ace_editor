@@ -85,3 +85,99 @@ filter_settings.ace_filter:
     use_wrap_mode:
       type: boolean
       label: 'Use wrap mode'
+
+# The text editor settings, as saved by the Ace Editor settings form on a text
+# format (issue #3605370). The form nests its values under "fieldset"; the flat
+# keys cover configuration created programmatically, by a recipe, a config
+# import, or an older release (issue #3618752).
+editor.settings.ace_editor:
+  type: mapping
+  label: 'Ace Editor text editor settings'
+  mapping:
+    fieldset:
+      type: ace_editor.editor_settings
+      label: 'Ace Editor settings'
+    theme:
+      type: string
+      label: 'Theme'
+    syntax:
+      type: string
+      label: 'Syntax'
+    height:
+      type: string
+      label: 'Height'
+    width:
+      type: string
+      label: 'Width'
+    font_size:
+      type: string
+      label: 'Font size'
+    line_numbers:
+      type: boolean
+      label: 'Line numbers'
+    show_invisibles:
+      type: boolean
+      label: 'Show invisible'
+    print_margins:
+      type: boolean
+      label: 'Print margins'
+    print_margin:
+      type: boolean
+      label: 'Print margin'
+    show_gutter:
+      type: boolean
+      label: 'Show gutter'
+    auto_complete:
+      type: boolean
+      label: 'Autocomplete'
+    use_wrap_mode:
+      type: boolean
+      label: 'Use wrap mode'
+
+# The settings of one Ace editor instance, shared by the text editor and the
+# field formatter schemas.
+ace_editor.editor_settings:
+  type: mapping
+  label: 'Ace Editor settings'
+  mapping:
+    theme:
+      type: string
+      label: 'Theme'
+    syntax:
+      type: string
+      label: 'Syntax'
+    height:
+      type: string
+      label: 'Height'
+    width:
+      type: string
+      label: 'Width'
+    font_size:
+      type: string
+      label: 'Font size'
+    line_numbers:
+      type: boolean
+      label: 'Line numbers'
+    show_invisibles:
+      type: boolean
+      label: 'Show invisible'
+    print_margins:
+      type: boolean
+      label: 'Print margins'
+    print_margin:
+      type: boolean
+      label: 'Print margin'
+    show_gutter:
+      type: boolean
+      label: 'Show gutter'
+    auto_complete:
+      type: boolean
+      label: 'Autocomplete'
+    use_wrap_mode:
+      type: boolean
+      label: 'Use wrap mode'
+
+# The Ace Format field formatter settings (issue #3618752).
+field.formatter.settings.ace_formatter:
+  type: ace_editor.editor_settings
+  label: 'Ace Format formatter settings'

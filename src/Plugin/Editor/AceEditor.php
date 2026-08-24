@@ -27,7 +27,11 @@ class AceEditor extends EditorBase {
    */
   public function getDefaultSettings() {
     $config = \Drupal::config('ace_editor.settings')->get();
-    return $config;
+    // theme_list and syntax_list are the option sources of the settings form,
+    // not settings. Drupal merges default settings into the saved entity, so
+    // returning them here writes both maps (174 entries) into every
+    // editor.editor.* configuration and breaks its schema (issue #3618752).
+    return array_diff_key($config, array_flip(['theme_list', 'syntax_list', '_core']));
   }
 
   /**
@@ -189,8 +193,21 @@ class AceEditor extends EditorBase {
    * {@inheritdoc}
    */
   public function getJsSettings(Editor $editor) {
-    // Pass settings to javascript.
-    return $editor->getSettings()['fieldset'];
+    $settings = $editor->getSettings();
+
+    // Settings saved through the configuration form are nested under
+    // "fieldset", while configuration created programmatically - by a recipe,
+    // a config import, or an older release - keeps them at the top level.
+    // Both shapes have to produce usable settings, otherwise the editor is
+    // handed a NULL and never attaches (the JavaScript then fails on
+    // format.editorSettings).
+    if (isset($settings['fieldset']) && is_array($settings['fieldset'])) {
+      $settings = $settings['fieldset'];
+    }
+
+    // Fill in anything the stored configuration does not carry, so every
+    // setting the JavaScript reads is always present.
+    return $settings + $this->getDefaultSettings();
   }
 
   /**
