@@ -68,9 +68,15 @@ class AceEditorLibraries {
         continue;
       }
 
-      $found = $this->fileSystem->scanDirectory(DRUPAL_ROOT . $path, '/^ace\.js/', ['recurse' => TRUE]);
+      $found = $this->fileSystem->scanDirectory(DRUPAL_ROOT . $path, '/^ace\.js$/', ['recurse' => TRUE]);
       if ($found) {
-        $this->libPath = substr(preg_replace('/ace\.js/', '', reset($found)->uri), strlen(DRUPAL_ROOT));
+        // The ace-builds package ships four builds of the same library;
+        // prefer the minified no-conflict one (issue #3322712).
+        $uris = array_map(static fn(object $file): string => $file->uri, array_values($found));
+        $preferred = AceEditorLibraryPreference::preferred($uris);
+        // Anchor the pattern: a parent directory named after ace.js would
+        // otherwise be mangled.
+        $this->libPath = substr(preg_replace('/ace\.js$/', '', $preferred), strlen(DRUPAL_ROOT));
         break;
       }
     }
@@ -121,13 +127,20 @@ class AceEditorLibraries {
     if (!$library_path) {
       return;
     }
-    $libraries['primary']['js'][$library_path . 'ace.js'] = ['weight' => -2];
+    // The Ace builds are already minified and must not be aggregated: Ace
+    // derives the directory of its dynamically loaded modes, themes and
+    // workers from its own script URL, which an aggregate breaks
+    // (issue #3322712).
+    $ace_asset = ['weight' => -2, 'minified' => TRUE, 'preprocess' => FALSE];
+    $libraries['primary']['js'][$library_path . 'ace.js'] = $ace_asset;
     $config = $this->configFactory->get('ace_editor.settings')->get();
-    if (isset($config['auto_complete'])) {
-      $libraries['primary']['js'][$library_path . 'ext-language_tools.js'] = ['weight' => -2];
+    // The key always exists in the shipped configuration, so isset() loaded
+    // the extension even with autocomplete turned off.
+    if (!empty($config['auto_complete'])) {
+      $libraries['primary']['js'][$library_path . 'ext-language_tools.js'] = $ace_asset;
     }
-    $libraries['formatter']['js'][$library_path . 'ace.js'] = ['weight' => -2];
-    $libraries['filter']['js'][$library_path . 'ace.js'] = ['weight' => -2];
+    $libraries['formatter']['js'][$library_path . 'ace.js'] = $ace_asset;
+    $libraries['filter']['js'][$library_path . 'ace.js'] = $ace_asset;
   }
 
 }
