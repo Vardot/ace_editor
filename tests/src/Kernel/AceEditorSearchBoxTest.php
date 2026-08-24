@@ -95,6 +95,7 @@ class AceEditorSearchBoxTest extends KernelTestBase {
       $this->container->get('extension.list.profile'),
       $this->container->get('config.factory'),
       NULL,
+      $this->container->get('cache.discovery'),
     ) extends AceEditorLibraries {
 
       /**

@@ -53,6 +53,18 @@ No. The field formatter and the text filter both render **read-only** editors â€
 they are for display only. Only the text-editor integration on edit forms is
 editable.
 
+## I see 404 errors for mode, theme or worker files
+
+Ace loads its mode, theme and worker files on demand, and resolves them against
+the URL of its own script. When that URL is not the library directory - an
+aggregate, or an asset served from elsewhere - those requests go to the wrong
+place.
+
+Two things keep the path right: the Ace builds are excluded from aggregation, so
+the script keeps its own URL, and the module publishes the library directory in
+`drupalSettings.ace_editor.base_path`, which `js/setup.js` applies to
+`ace.config`. Rebuild the cache after updating.
+
 ## Does it work with Drupal 10, 11 and 12?
 
 Yes â€” the module requires Drupal core `^10 || ^11 || ^12`.

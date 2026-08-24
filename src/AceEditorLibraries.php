@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\ace_editor;
 
+use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Extension\ModuleExtensionList;
 use Drupal\Core\Extension\ProfileExtensionList;
@@ -25,12 +26,18 @@ class AceEditorLibraries {
    */
   protected string|false|null $libPath = NULL;
 
+  /**
+   * The cache id under which the resolved library path is stored.
+   */
+  protected const LIB_PATH_CID = 'ace_editor.lib_path';
+
   public function __construct(
     protected FileSystemInterface $fileSystem,
     protected ModuleExtensionList $moduleExtensionList,
     protected ProfileExtensionList $profileExtensionList,
     protected ConfigFactoryInterface $configFactory,
     protected ?string $installProfile,
+    protected CacheBackendInterface $cacheDiscovery,
   ) {
   }
 
@@ -48,6 +55,14 @@ class AceEditorLibraries {
    */
   public function libPath(): string|false {
     if ($this->libPath !== NULL) {
+      return $this->libPath;
+    }
+
+    // Locating the library walks the candidate directories recursively, and
+    // the path is now read on every page that carries an Ace library, so keep
+    // the result until the next cache rebuild (issue #3326303).
+    if ($cached = $this->cacheDiscovery->get(static::LIB_PATH_CID)) {
+      $this->libPath = $cached->data;
       return $this->libPath;
     }
 
@@ -80,7 +95,31 @@ class AceEditorLibraries {
         break;
       }
     }
+    $this->cacheDiscovery->set(static::LIB_PATH_CID, $this->libPath);
+
     return $this->libPath;
+  }
+
+  /**
+   * Returns the URL of the library directory, for the Ace JavaScript.
+   *
+   * Ace resolves its dynamically loaded modes, themes and workers against the
+   * URL of its own script. Publishing the directory lets the JavaScript set
+   * that path explicitly, so it stays correct however the asset is delivered
+   * (issue #3326303).
+   *
+   * @return string|null
+   *   The library URL, including the site base path, or NULL when the library
+   *   is not installed.
+   */
+  public function libUrl(): ?string {
+    $path = $this->libPath();
+    if (!$path) {
+      return NULL;
+    }
+
+    // The base path carries a site served from a subdirectory.
+    return base_path() . ltrim($path, '/');
   }
 
   /**

@@ -3,6 +3,7 @@
 namespace Drupal\ace_editor\Hook;
 
 use Drupal\ace_editor\AceEditorLibraries;
+use Drupal\Core\Asset\AttachedAssetsInterface;
 use Drupal\Core\Hook\Attribute\Hook;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
@@ -63,6 +64,31 @@ class AceEditorHooks {
   public function libraryInfoAlter(&$libraries, $extension) {
     if ($extension == 'ace_editor') {
       $this->libraries->alterLibraryInfo($libraries);
+    }
+  }
+
+  /**
+   * Implements hook_js_settings_alter().
+   *
+   * Publishes the library directory for the pages that carry an Ace library,
+   * so the JavaScript can point Ace at its own mode, theme and worker files
+   * instead of deriving them from the URL of the loaded script.
+   */
+  #[Hook('js_settings_alter')]
+  public function jsSettingsAlter(array &$settings, AttachedAssetsInterface $assets) {
+    $ace_libraries = [
+      'ace_editor/primary',
+      'ace_editor/formatter',
+      'ace_editor/filter',
+      'ace_editor/widget',
+    ];
+    if (!array_intersect($ace_libraries, $assets->getLibraries())) {
+      return;
+    }
+
+    $url = $this->libraries->libUrl();
+    if ($url) {
+      $settings['ace_editor']['base_path'] = $url;
     }
   }
 

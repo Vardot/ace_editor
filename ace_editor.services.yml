@@ -7,6 +7,7 @@ services:
       - '@extension.list.profile'
       - '@config.factory'
       - '%install_profile%'
+      - '@cache.discovery'
 
   Drupal\ace_editor\Hook\AceEditorHooks:
     class: Drupal\ace_editor\Hook\AceEditorHooks
