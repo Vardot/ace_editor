@@ -31,8 +31,13 @@ class AceEditorHooks {
         $output .= '<p>' . $this->t('Ace is a code editor written in JavaScript, allowing you to edit HTML, PHP and JavaScript (and more). It provides syntax highlighting, proper indentation, keyboard shortcuts, find and replace (including regular expressions).') . '</p>';
         $output .= '<p>' . $this->t("This module integrates the Ace editor into Drupal's node/block edit forms, for editing raw HTML, PHP, JS, etc... in a familiar way..") . '</p>';
         $output .= '<p>' . $this->t('It supports:') . '</p>';
-        $output .= '<ul>' . $this->t('<li>node edit forms, including summary</li>') . '</ul>';
-        $output .= '<ul>' . $this->t('<li>blocks edit forms</li>') . '</ul>';
+        // The list markup stays outside t(): a translatable string must not
+        // carry HTML tags (issue #3177428), and the two single-item lists
+        // were malformed markup.
+        $output .= '<ul>';
+        $output .= '<li>' . $this->t('node edit forms, including summary') . '</li>';
+        $output .= '<li>' . $this->t('blocks edit forms') . '</li>';
+        $output .= '</ul>';
         $output .= '<p>' . $this->t('It also provides a display formatter, along with a text filter and an API to embed and show code snippets in your content.') . '</p>';
         return $output;
 

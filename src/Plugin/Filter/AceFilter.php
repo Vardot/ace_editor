@@ -12,7 +12,7 @@ use Drupal\filter\Plugin\FilterBase;
  * @Filter(
  *   id = "ace_filter",
  *   title = @Translation("Ace Filter"),
- *   description = @Translation("Use &lt;ace&gt; and &lt;/ace&gt; tags to show it with syntax highlighting. Add attributes to <ace> tag to control formatting, see module's README.txt for examples."),
+ *   description = @Translation("Use @open and @close tags to show it with syntax highlighting. Add attributes to the @open tag to control formatting, see the module's documentation for examples.", arguments = {"@open" = "<ace>", "@close" = "</ace>"}),
  *   type = Drupal\filter\Plugin\FilterInterface::TYPE_MARKUP_LANGUAGE,
  *   settings = {
  *           "theme" = "cobalt",
