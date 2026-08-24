@@ -14,8 +14,10 @@ Ace Editor surfaces the Ace code editor in three independent ways:
   code with the *Ace Format* formatter.
 - **Text filter** — embed code snippets in body text with `<ace> … </ace>` tags;
   the *Ace Filter* renders each snippet as a read-only highlighted editor.
+- **Field widget** — edit a plain long-text field with the *Ace Editor* widget,
+  for fields that carry no text format.
 
-All three share a common configuration (theme, syntax mode, dimensions, font
+They all share a common configuration (theme, syntax mode, dimensions, font
 size, line numbers, print margin, word wrap, autocomplete).
 
 ### Key Features

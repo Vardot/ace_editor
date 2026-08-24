@@ -146,6 +146,13 @@ class AceEditorLibraries {
     }
     $libraries['formatter']['js'][$library_path . 'ace.js'] = $ace_asset;
     $libraries['filter']['js'][$library_path . 'ace.js'] = $ace_asset;
+    $libraries['widget']['js'][$library_path . 'ace.js'] = $ace_asset;
+    // The field widget is an editing surface, so it needs the same extensions
+    // the text editor loads.
+    $libraries['widget']['js'][$library_path . 'ext-searchbox.js'] = $ace_asset;
+    if (!empty($config['auto_complete'])) {
+      $libraries['widget']['js'][$library_path . 'ext-language_tools.js'] = $ace_asset;
+    }
   }
 
 }

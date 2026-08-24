@@ -37,3 +37,15 @@ filter:
     - core/jquery
     - core/drupal
     - core/drupalSettings
+
+widget:
+  version: VERSION
+  js:
+    js/widget.js: {}
+  css:
+    component:
+      styles/editor.css: {}
+  dependencies:
+    - core/jquery
+    - core/drupal
+    - core/once

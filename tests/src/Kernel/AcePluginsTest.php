@@ -66,6 +66,28 @@ class AcePluginsTest extends KernelTestBase {
   }
 
   /**
+   * The Ace Editor field widget plugin is discoverable for plain long text.
+   */
+  public function testWidgetPluginExists(): void {
+    $manager = \Drupal::service('plugin.manager.field.widget');
+    $this->assertTrue($manager->hasDefinition('ace_editor'));
+    $this->assertContains('string_long', $manager->getDefinition('ace_editor')['field_types']);
+  }
+
+  /**
+   * The widget defaults carry the module settings, not the option lists.
+   */
+  public function testWidgetDefaultSettings(): void {
+    $defaults = \Drupal::service('plugin.manager.field.widget')
+      ->getDefaultSettings('ace_editor');
+
+    $this->assertSame('cobalt', $defaults['theme']);
+    $this->assertSame('html', $defaults['syntax']);
+    $this->assertArrayNotHasKey('theme_list', $defaults);
+    $this->assertArrayNotHasKey('syntax_list', $defaults);
+  }
+
+  /**
    * The shipped default configuration installs with the documented values.
    */
   public function testDefaultSettings(): void {

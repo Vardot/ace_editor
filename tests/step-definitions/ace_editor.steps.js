@@ -426,3 +426,57 @@ Then(/^the "([^"]*)" element should be taller than (\d+) pixels(?: within (\d+) 
     );
   }, `Expected "${name}" (${selector}) to be taller than ${minimum}px`);
 });
+
+/**
+ * Assert the Ace mode of the widget attached to a named field.
+ *
+ * The widget prints its editor next to the field's textarea, so the field name
+ * identifies the instance without depending on the delta or the page order.
+ *
+ * Example: Then the Ace widget "field_gherkin_script" should use the "gherkin" mode
+ */
+Then(/^the Ace widget "([^"]*)" should use the "([^"]*)" mode$/, async function (field, mode) {
+  await attempt(async () => {
+    const actual = await this.page.evaluate((field) => {
+      const textarea = document.querySelector('textarea.ace-editor-widget[name^="' + field + '"]');
+      if (!textarea || !window.ace) {
+        return null;
+      }
+      const editor = window.ace.edit(textarea.id + '-ace-widget');
+      return editor.getSession().getMode().$id;
+    }, field);
+    if (actual === null) {
+      throw new Error(`No Ace widget was found for the "${field}" field.`);
+    }
+    if (actual !== 'ace/mode/' + mode) {
+      throw new Error(`Expected the "${field}" widget to use "ace/mode/${mode}", found "${actual}".`);
+    }
+  }, `Could not verify the mode of the "${field}" Ace widget`);
+});
+
+/**
+ * Assert the text held by the Ace widget of a named field.
+ *
+ * Example: Then the Ace widget "field_gherkin_script" content should contain "Given I am"
+ */
+Then(/^the Ace widget "([^"]*)" content should( not)? contain "([^"]*)"$/, async function (field, negated, text) {
+  await attempt(async () => {
+    const content = await this.page.evaluate((field) => {
+      const textarea = document.querySelector('textarea.ace-editor-widget[name^="' + field + '"]');
+      if (!textarea || !window.ace) {
+        return null;
+      }
+      return window.ace.edit(textarea.id + '-ace-widget').getSession().getValue();
+    }, field);
+    if (content === null) {
+      throw new Error(`No Ace widget was found for the "${field}" field.`);
+    }
+    const contains = content.includes(text);
+    if (negated && contains) {
+      throw new Error(`Expected the "${field}" widget not to contain "${text}", but it did.`);
+    }
+    if (!negated && !contains) {
+      throw new Error(`Expected the "${field}" widget to contain "${text}", but it did not.`);
+    }
+  }, `Could not verify the content of the "${field}" Ace widget`);
+});

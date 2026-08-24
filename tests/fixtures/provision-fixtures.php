@@ -72,8 +72,17 @@ Editor::create([
   'image_upload' => [],
 ])->save();
 
-// 2. Enable the Ace Filter on the Full HTML format, running first.
+// 2. Make Full HTML the default format, so a fresh node form attaches the Ace
+// editor rather than another format's. Core's BigPipe attaches behaviours as
+// placeholders arrive, which can run before a late editor library has been
+// evaluated, and the scenarios would then record an unrelated console error.
 $full_html = FilterFormat::load('full_html');
+$full_html->set('weight', -20)->save();
+if ($basic_html = FilterFormat::load('basic_html')) {
+  $basic_html->set('weight', 0)->save();
+}
+
+// 3. Enable the Ace Filter on the Full HTML format, running first.
 $full_html->setFilterConfig('ace_filter', [
   'status' => TRUE,
   'weight' => -50,
@@ -81,7 +90,7 @@ $full_html->setFilterConfig('ace_filter', [
 ]);
 $full_html->save();
 
-// 3. Display the Article body with the Ace Format field formatter.
+// 4. Display the Article body with the Ace Format field formatter.
 $display = \Drupal::service('entity_display.repository')
   ->getViewDisplay('node', 'article', 'default');
 $display->setComponent('body', [
@@ -90,7 +99,58 @@ $display->setComponent('body', [
   'settings' => ['height' => 'auto'] + $shared_settings,
 ])->save();
 
-// 4. Demo content. Keyed by title so reruns update rather than duplicate.
+// 5. A plain long text field on the Article, edited with the Ace Editor widget:
+// such a field carries no text format, so the text editor cannot reach it
+// (issue #2933546).
+if (!FieldStorageConfig::loadByName('node', 'field_ace_code')) {
+  FieldStorageConfig::create([
+    'field_name' => 'field_ace_code',
+    'entity_type' => 'node',
+    'type' => 'string_long',
+  ])->save();
+}
+if (!FieldConfig::loadByName('node', 'article', 'field_ace_code')) {
+  FieldConfig::create([
+    'field_name' => 'field_ace_code',
+    'entity_type' => 'node',
+    'bundle' => 'article',
+    'label' => 'Ace code',
+  ])->save();
+}
+\Drupal::service('entity_display.repository')
+  ->getFormDisplay('node', 'article')
+  ->setComponent('field_ace_code', [
+    'type' => 'ace_editor',
+    'settings' => ['theme' => 'twilight', 'syntax' => 'css'] + $shared_settings,
+  ])
+  ->save();
+
+// 6. A second plain long text field holding a Gherkin script: Ace ships a
+// "gherkin" mode, so a .feature script needs nothing but the widget's syntax.
+if (!FieldStorageConfig::loadByName('node', 'field_gherkin_script')) {
+  FieldStorageConfig::create([
+    'field_name' => 'field_gherkin_script',
+    'entity_type' => 'node',
+    'type' => 'string_long',
+  ])->save();
+}
+if (!FieldConfig::loadByName('node', 'article', 'field_gherkin_script')) {
+  FieldConfig::create([
+    'field_name' => 'field_gherkin_script',
+    'entity_type' => 'node',
+    'bundle' => 'article',
+    'label' => 'Gherkin script',
+  ])->save();
+}
+\Drupal::service('entity_display.repository')
+  ->getFormDisplay('node', 'article')
+  ->setComponent('field_gherkin_script', [
+    'type' => 'ace_editor',
+    'settings' => ['theme' => 'twilight', 'syntax' => 'gherkin'] + $shared_settings,
+  ])
+  ->save();
+
+// 7. Demo content. Keyed by title so reruns update rather than duplicate.
 $nodes = [
   'Ace Filter Demo' => [
     'type' => 'page',
@@ -105,6 +165,8 @@ $nodes = [
       'value' => "<h1>Title</h1>\n<p>Some HTML code</p>",
       'format' => 'full_html',
     ],
+    'field_ace_code' => ".ace-widget-demo {\n  color: rebeccapurple;\n}",
+    'field_gherkin_script' => "Feature: Editing a Gherkin script in a field\n  Scenario: The editor highlights the script\n    Given I am a logged in user\n    When I edit the field\n    Then the script keeps its indentation",
   ],
 ];
 foreach ($nodes as $title => $values) {
@@ -112,11 +174,16 @@ foreach ($nodes as $title => $values) {
     ->loadByProperties(['title' => $title]);
   $node = $found ? reset($found) : Node::create(['type' => $values['type'], 'title' => $title]);
   $node->set('body', $values['body']);
+  foreach (['field_ace_code', 'field_gherkin_script'] as $extra) {
+    if (isset($values[$extra])) {
+      $node->set($extra, $values[$extra]);
+    }
+  }
   $node->setPublished();
   $node->save();
 }
 
-// 5. Make the editor / formatter / filter markup observable: disable CSS/JS
+// 8. Make the editor / formatter / filter markup observable: disable CSS/JS
 // aggregation so the scenarios run against un-aggregated assets.
 \Drupal::configFactory()->getEditable('system.performance')
   ->set('css.preprocess', FALSE)

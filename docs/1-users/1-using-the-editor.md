@@ -17,6 +17,18 @@ full Ace code editor for any text format you assign it to.
 Any field that offers this text format now shows the Ace editor when that format
 is selected.
 
+## Fields without a text format
+
+A plain long text field has no text format, so a format's editor cannot reach it.
+Use the **Ace Editor** field widget instead:
+
+1. Go to the bundle's **Manage form display**.
+2. Set the field's widget to **Ace Editor**.
+3. Configure the same settings on the widget itself, through its gear icon.
+
+The widget carries the settings of each field, so two fields on one form can use
+different themes and syntaxes.
+
 ## What you get
 
 - Syntax highlighting for the configured language.
