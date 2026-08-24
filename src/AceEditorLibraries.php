@@ -133,6 +133,11 @@ class AceEditorLibraries {
     // (issue #3322712).
     $ace_asset = ['weight' => -2, 'minified' => TRUE, 'preprocess' => FALSE];
     $libraries['primary']['js'][$library_path . 'ace.js'] = $ace_asset;
+    // The search box extension powers the Find (Ctrl-F) and Replace (Ctrl-H)
+    // shortcuts, which do nothing without it (issue #3473555). Only the
+    // editing library needs it: the formatter and the filter render read-only
+    // code, so loading it there would be payload nobody uses.
+    $libraries['primary']['js'][$library_path . 'ext-searchbox.js'] = $ace_asset;
     $config = $this->configFactory->get('ace_editor.settings')->get();
     // The key always exists in the shipped configuration, so isset() loaded
     // the extension even with autocomplete turned off.

@@ -347,3 +347,19 @@ When(/^(?:I |we )?click(?: on)?(?: the)? "([^"]*)" element$/, async function (na
     await waitForPageLoad(this.page, this.minWaitTime && this.minWaitTime.page);
   }, `Could not click the "${name}" element`);
 });
+
+/**
+ * Focus a named element and press a key or chord. Generic - any key, any
+ * element; used here to exercise the editor's keyboard shortcuts.
+ *
+ * Example: When I press the "Control+f" key in the "ace editor container" element
+ */
+When(/^(?:I |we )?press the "([^"]*)" key in the "([^"]*)" element$/, async function (key, name) {
+  const sel = resolveName(this, name);
+  await attempt(async () => {
+    const loc = this.page.locator(sel).first();
+    await loc.waitFor({ state: 'visible', timeout: 10000 });
+    await loc.click();
+    await this.page.keyboard.press(key);
+  }, `Could not press "${key}" in the "${name}" element`);
+});

@@ -3,28 +3,23 @@
     "drupal page heading": "h1",
     "drupal status messages": ".messages--status",
     "drupal error messages": ".messages--error",
-
     "body textarea": "#edit-body-0-value",
     "body field wrapper": ".js-form-type-textarea, .field--name-body",
-
     "ace editor pre": "pre[id$='-ace-editor']",
     "ace editor container": ".js-form-type-textarea .ace_editor",
     "ace editor content": ".js-form-type-textarea .ace_editor .ace_content",
     "ace editor gutter cell": ".js-form-type-textarea .ace_editor .ace_gutter-cell",
     "ace editor print margin": ".js-form-type-textarea .ace_editor .ace_print-margin",
     "ace editor line numbers": ".js-form-type-textarea .ace_editor .ace_gutter-layer",
-
     "ace formatter wrap": ".ace_formatter",
     "ace formatter container": ".ace_formatter .ace_editor",
     "ace formatter readonly content": ".ace_formatter textarea.content",
     "ace formatter gutter cell": ".ace_formatter .ace_editor .ace_gutter-cell",
-
     "ace filter pre": "pre[id^='ace-editor-inline']",
     "ace filter container": "pre[id^='ace-editor-inline'].ace_editor",
     "ace filter gutter cell": "pre[id^='ace-editor-inline'] .ace_gutter-cell",
     "ace filter twilight theme": "pre[id^='ace-editor-inline'].ace-twilight",
     "ace filter cobalt theme": "pre[id^='ace-editor-inline'].ace-cobalt",
-
     "format editor select": "#edit-editor-editor",
     "ace settings fieldset": "fieldset:has(legend:has-text('Ace Editor Settings'))",
     "ace theme select": "select[name*='[theme]']",
@@ -36,9 +31,9 @@
     "ace print margin checkbox": "input[type='checkbox'][name*='[print_margins]']",
     "ace autocomplete checkbox": "input[type='checkbox'][name*='[auto_complete]']",
     "ace autocomplete label": "label:has-text('Enable Autocomplete (Ctrl+Space)')",
-
     "filter ace tips": ".filter-help, .filter-guidelines, details:has-text('Ace Filter')",
-    "save configuration button": "#edit-submit, input[value='Save configuration']"
+    "save configuration button": "#edit-submit, input[value='Save configuration']",
+    "ace search box": ".js-form-type-textarea .ace_editor .ace_search"
   },
   "xpath": {}
 }
