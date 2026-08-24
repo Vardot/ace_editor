@@ -87,7 +87,7 @@ $display = \Drupal::service('entity_display.repository')
 $display->setComponent('body', [
   'type' => 'ace_formatter',
   'label' => 'hidden',
-  'settings' => ['height' => '250px'] + $shared_settings,
+  'settings' => ['height' => 'auto'] + $shared_settings,
 ])->save();
 
 // 4. Demo content. Keyed by title so reruns update rather than duplicate.

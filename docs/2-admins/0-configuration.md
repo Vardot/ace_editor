@@ -10,7 +10,7 @@ starting point for each integration's own settings form.
 | --- | --- | --- |
 | Theme | `theme` | The Ace colour theme (e.g. *cobalt*, *twilight*, *github*). |
 | Syntax | `syntax` | The language mode used for highlighting (e.g. *html*, *php*, *css*). |
-| Height | `height` | Editor height, in pixels or percent (e.g. `300px`). |
+| Height | `height` | Editor height, in pixels or percent (e.g. `300px`), or `auto` to fit the content. |
 | Width | `width` | Editor width, in pixels or percent (e.g. `100%`). |
 | Font size | `font_size` | Editor font size (e.g. `12pt`). |
 | Show line numbers | `line_numbers` | Toggle the line-number gutter. |

@@ -99,7 +99,15 @@
                     });
                 }
                 editor.getSession().setValue(content.val());
-                $("#" + display_id).height(ace_settings.height || '300px').width(ace_settings.width || '100%');
+                // A height of "auto" grows the editor to fit its content
+                // through Ace's own line sizing (issue #2846046).
+                if (ace_settings.height === 'auto') {
+                    editor.setOption('maxLines', Math.max(editor.getSession().getLength(), 1));
+                    $("#" + display_id).width(ace_settings.width || '100%');
+                }
+                else {
+                    $("#" + display_id).height(ace_settings.height || '300px').width(ace_settings.width || '100%');
+                }
 
                 editor.setOptions({
                     fontSize: ace_settings.font_size ? ace_settings.font_size : '12pt',

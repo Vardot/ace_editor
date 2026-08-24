@@ -405,3 +405,24 @@ Then(/^the Ace editor content should( not)? contain "([^"]*)"$/, async function 
     }
   }, `Could not verify the Ace editor content`);
 });
+
+/**
+ * Assert a named element's rendered height is greater than N pixels.
+ *
+ * Example: Then the "ace formatter container" element should be taller than 20 pixels
+ */
+Then(/^the "([^"]*)" element should be taller than (\d+) pixels(?: within (\d+) seconds?)?$/, async function (name, px, sec) {
+  const selector = resolveName(this, name);
+  const minimum = Number(px);
+  const timeout = sec ? Number(sec) * 1000 : 10000;
+  await attempt(async () => {
+    await this.page.waitForFunction(
+      ([s, m]) => {
+        const element = document.querySelector(s);
+        return !!element && element.getBoundingClientRect().height > m;
+      },
+      [selector, minimum],
+      { timeout, polling: 100 },
+    );
+  }, `Expected "${name}" (${selector}) to be taller than ${minimum}px`);
+});

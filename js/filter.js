@@ -36,7 +36,15 @@
                 editor.setTheme("ace/theme/"+theme);
                 editor.getSession().setMode("ace/mode/"+mode);
                 editor.getSession().setValue(content);
-                $("#"+id).height(custom_ace_settings.height).width(custom_ace_settings.width);
+                // A height of "auto" grows the editor to fit its content
+                // through Ace's own line sizing (issue #2846046).
+                if (custom_ace_settings.height === 'auto') {
+                    editor.setOption('maxLines', Math.max(editor.getSession().getLength(), 1));
+                    $("#"+id).width(custom_ace_settings.width);
+                }
+                else {
+                    $("#"+id).height(custom_ace_settings.height).width(custom_ace_settings.width);
+                }
 
                 editor.setOptions({
                     fontSize: custom_ace_settings.font_size ? custom_ace_settings.font_size : '12pt',
