@@ -6,6 +6,7 @@ namespace Drupal\Tests\ace_editor\Unit;
 
 use Drupal\ace_editor\Plugin\Filter\AceFilter;
 use Drupal\Tests\UnitTestCase;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Tests the pure parsing helpers of the Ace Filter.
@@ -18,6 +19,7 @@ use Drupal\Tests\UnitTestCase;
  * @group ace_editor
  * @coversDefaultClass \Drupal\ace_editor\Plugin\Filter\AceFilter
  */
+#[Group('ace_editor')]
 class AceFilterTagAttributesTest extends UnitTestCase {
 
   /**

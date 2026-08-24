@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\Tests\ace_editor\Kernel;
 
 use Drupal\KernelTests\KernelTestBase;
+use PHPUnit\Framework\Attributes\Group;
 
 /**
  * Tests that the Ace Editor plugins and default configuration are available.
@@ -16,6 +17,7 @@ use Drupal\KernelTests\KernelTestBase;
  *
  * @group ace_editor
  */
+#[Group('ace_editor')]
 class AcePluginsTest extends KernelTestBase {
 
   /**

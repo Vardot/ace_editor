@@ -5,8 +5,11 @@
  * Install functions for the Ace Editor module.
  */
 
+use Drupal\Component\Utility\DeprecationHelper;
+use Drupal\Core\Extension\Requirement\RequirementSeverity;
+
 /**
- * Implements hook_enable().
+ * Implements hook_install().
  */
 function ace_editor_install() {
   $lib_path = ace_editor_lib_path();
@@ -35,11 +38,11 @@ function ace_editor_requirements($phase) {
     $lib_path = ace_editor_lib_path();
     if ($lib_path) {
       $requirements['ace_editor']['value'] = t('Installed at @location', ['@location' => $lib_path]);
-      $requirements['ace_editor']['severity'] = REQUIREMENT_OK;
+      $requirements['ace_editor']['severity'] = DeprecationHelper::backwardsCompatibleCall(\Drupal::VERSION, '11.2.0', fn() => RequirementSeverity::OK, fn() => REQUIREMENT_OK);
     }
     else {
       $requirements['ace_editor']['value'] = t('Not installed');
-      $requirements['ace_editor']['severity'] = REQUIREMENT_ERROR;
+      $requirements['ace_editor']['severity'] = DeprecationHelper::backwardsCompatibleCall(\Drupal::VERSION, '11.2.0', fn() => RequirementSeverity::Error, fn() => REQUIREMENT_ERROR);
       $requirements['ace_editor']['description'] = t('Please download the Ace library from <a href="@url">@url</a> to the @location directory for using the Ace Editor module.', [
         '@url' => 'https://github.com/ajaxorg/ace-builds',
         '@location' => '/libraries/',
