@@ -63,6 +63,26 @@
                 enableBasicAutocompletion: settings.auto_complete ? true: false
             });
 
+            // Free the Tab key and add the Esc escape, so a keyboard user is
+            // not trapped in the editor (WCAG 2.1.2). Older Ace builds do not
+            // know the option; setting it is harmless there.
+            try {
+                editors[ace_editor_id].setOption('enableKeyboardAccessibility', true);
+            } catch (e) {}
+
+            // Carry the field's label to the editor, and mark it required when
+            // the original textarea was, so assistive technology names and
+            // announces the replacement the same way.
+            try {
+                var labelText = $("label[for='" + element_id + "']").first().text().trim();
+                if (labelText) {
+                    editors[ace_editor_id].setOption('textInputAriaLabel', labelText);
+                }
+                if (requiredElements.has(element_id)) {
+                    editors[ace_editor_id].textInput.getElement().setAttribute('aria-required', 'true');
+                }
+            } catch (e) {}
+
             if (settings.use_wrap_mode) {
               editors[ace_editor_id].getSession().setUseWrapMode(true);
             }

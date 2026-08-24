@@ -71,6 +71,16 @@
                     enableBasicAutocompletion: !!settings.auto_complete
                 });
 
+                // Free Tab and add the Esc escape so a keyboard user is not
+                // trapped in the editor (WCAG 2.1.2).
+                try {
+                    editor.setOption('enableKeyboardAccessibility', true);
+                    var labelText = $("label[for='" + element.id + "']").first().text().trim();
+                    if (labelText) {
+                        editor.setOption('textInputAriaLabel', labelText);
+                    }
+                } catch (e) {}
+
                 if (settings.use_wrap_mode) {
                     editor.getSession().setUseWrapMode(true);
                 }
