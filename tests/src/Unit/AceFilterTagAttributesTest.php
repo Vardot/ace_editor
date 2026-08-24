@@ -67,6 +67,18 @@ class AceFilterTagAttributesTest extends UnitTestCase {
   }
 
   /**
+   * TRUE/FALSE keep their meaning instead of being inverted by intval().
+   *
+   * @covers ::tagAttributes
+   */
+  public function testWordBooleanAttributes(): void {
+    $this->assertSame(
+      ['print_margin' => 1, 'line_numbers' => 0],
+      $this->filter->tagAttributes('ace', '<ace print-margin="TRUE" line-numbers="false">code</ace>')
+    );
+  }
+
+  /**
    * A tag with no attributes yields an empty set, not FALSE.
    *
    * The caller iterates over the result, so returning FALSE raised a warning on

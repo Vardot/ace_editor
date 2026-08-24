@@ -70,7 +70,33 @@ class AceFilterProcessTest extends KernelTestBase {
       'markup' => $markup,
       'raised' => $raised,
       'instances' => $attachments['drupalSettings']['ace_filter']['instances'] ?? [],
+      'libraries' => $attachments['library'] ?? [],
     ];
+  }
+
+  /**
+   * Each tag keeps its own theme/mode library; none is dropped by a later tag.
+   */
+  public function testEveryTagKeepsItsLibraries(): void {
+    // The library must exist for the filter to attach it.
+    $this->container->set('library.discovery', new class {
+
+      /**
+       * {@inheritdoc}
+       */
+      public function getLibraryByName($extension, $name) {
+        return ['js' => []];
+      }
+
+    });
+
+    $result = $this->process('<ace theme="twilight">a</ace><ace theme="cobalt" syntax="css">b</ace>');
+
+    $this->assertContains('ace_editor/theme.twilight', $result['libraries']);
+    $this->assertContains('ace_editor/theme.cobalt', $result['libraries']);
+    $this->assertContains('ace_editor/mode.css', $result['libraries']);
+    // Only this call's snippets are attached, not a cumulative page snapshot.
+    $this->assertCount(2, $result['instances']);
   }
 
   /**
