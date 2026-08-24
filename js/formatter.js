@@ -10,6 +10,12 @@
      * themes and syntaxes (issue #2999328).
      */
 
+    // A page-wide counter for the injected display ids. once() only returns the
+    // containers new to each attach, so a per-call index restarts at 0 and
+    // collides with an id from an earlier attach (for example one added over
+    // AJAX). This never repeats.
+    var displayCount = 0;
+
     /** Reads the settings of one container. */
     function containerSettings(element, settings) {
         var raw = element.getAttribute('data-ace-formatter-settings');
@@ -59,7 +65,7 @@
 
             var containers = once('ace-formatter', '.ace_formatter', context);
 
-            containers.forEach(function (element, index) {
+            containers.forEach(function (element) {
 
                 var container = $(element);
                 var ace_settings = containerSettings(element, settings);
@@ -68,7 +74,7 @@
                 }
 
                 // Setting a unique id for the editor within this container.
-                var display_id = 'ace_formatter_display_' + index;
+                var display_id = 'ace_formatter_display_' + (displayCount++);
                 var display = container.children('[id^="ace_formatter_display_"]').first();
                 if (!display.length) {
                     container.append("<div id='" + display_id + "'></div>");
@@ -115,6 +121,10 @@
                     showPrintMargin: !!(ace_settings.print_margins !== undefined ? ace_settings.print_margins : ace_settings.print_margin),
                     showInvisibles: !!ace_settings.show_invisibles
                 });
+
+                if (ace_settings.use_wrap_mode) {
+                    editor.getSession().setUseWrapMode(true);
+                }
 
             });
         }

@@ -52,6 +52,10 @@
                     showPrintMargin: !!(custom_ace_settings.print_margins !== undefined ? custom_ace_settings.print_margins : custom_ace_settings.print_margin),
                     showInvisibles: !!custom_ace_settings.show_invisibles
                 });
+
+                if (custom_ace_settings.use_wrap_mode) {
+                    editor.getSession().setUseWrapMode(true);
+                }
             })
         }
     };
