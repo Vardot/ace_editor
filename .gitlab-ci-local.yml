@@ -7,14 +7,15 @@
 # way so the whole thing can be exercised locally before pushing:
 #
 #   validate : cspell + eslint linters (Node 20)
-#   test     : varbase-e2e BDD suite against a freshly built Drupal 11 site
+#   test     : automated functional testing, the BDD suite of
+#              @vardot/varbase-e2e against a freshly built Drupal 11 site
 #              (MariaDB service + `drush runserver`, the module added via a
 #              Composer path repository, the Ace library downloaded, fixtures
 #              provisioned)
 #
 # Usage:
 #   gitlab-ci-local --file .gitlab-ci-local.yml                 # all jobs
-#   gitlab-ci-local --file .gitlab-ci-local.yml varbase-e2e-test # just the suite
+#   gitlab-ci-local --file .gitlab-ci-local.yml functional-tests # just the suite
 #   gitlab-ci-local --file .gitlab-ci-local.yml eslint          # one linter
 
 stages:
@@ -68,7 +69,7 @@ pages:
 # Cucumber suite). The module under test is pulled into the site through a
 # Composer path repository pointing at the checked-out repo, so the exact
 # working-tree code is what gets exercised.
-varbase-e2e-test:
+functional-tests:
   stage: test
   image: node:20-bookworm
   # MariaDB service (Drupal 11 needs SQLite >= 3.45, newer than Debian ships,

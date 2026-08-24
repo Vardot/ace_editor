@@ -77,8 +77,9 @@ phpunit:
     - cp .cucumber.js.bak cucumber.js && rm .cucumber.js.bak
     - ./node_modules/.bin/playwright install --with-deps chromium
 
-# = varbase-e2e BDD - Drupal Standard profile =
-varbase-e2e-test:
+# = Automated functional testing - BDD scenarios on the Drupal Standard
+# profile, driven by @vardot/varbase-e2e (Playwright + Cucumber) =
+functional-tests:
   extends: .testing-job-base
   needs: [composer]
   # Override the parent's services - we only need the database. Playwright
