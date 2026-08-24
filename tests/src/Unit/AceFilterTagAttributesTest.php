@@ -67,12 +67,16 @@ class AceFilterTagAttributesTest extends UnitTestCase {
   }
 
   /**
-   * A tag with no attributes yields FALSE.
+   * A tag with no attributes yields an empty set, not FALSE.
+   *
+   * The caller iterates over the result, so returning FALSE raised a warning on
+   * every render of a bare tag, which is the documented basic usage.
    *
    * @covers ::tagAttributes
    */
-  public function testNoAttributesReturnsFalse(): void {
-    $this->assertFalse($this->filter->tagAttributes('ace', '<ace>code</ace>'));
+  public function testNoAttributesReturnsAnEmptyArray(): void {
+    $this->assertSame([], $this->filter->tagAttributes('ace', '<ace>code</ace>'));
+    $this->assertSame([], $this->filter->tagAttributes('ace', '<ace >code</ace>'));
   }
 
   /**

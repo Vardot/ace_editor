@@ -179,6 +179,9 @@ class AceFilter extends FilterBase {
 
   /**
    * Get all attributes of an <ace> tag in key/value pairs.
+   *
+   * @return array
+   *   The attributes, keyed by name, empty when the tag carries none.
    */
   public function tagAttributes($element_name, $xml) {
     // Grab the string of attributes inside the editor tag.
@@ -202,9 +205,9 @@ class AceFilter extends FilterBase {
         return $attribute_array;
       }
     }
-    // Attributes either weren't found, or couldn't be extracted
-    // by the regular expression.
-    return FALSE;
+    // A tag without attributes, or attributes the regular expression could not
+    // extract, is simply an empty set: the caller iterates over the result.
+    return [];
   }
 
   /**
