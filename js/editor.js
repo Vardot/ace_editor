@@ -119,6 +119,9 @@
                 }
                 $element.show().css('visibility', 'visible');
                 //element.removeAttribute('contentEditable');
+                // Drop the destroyed editor from the registry, so it is not
+                // held in memory for the life of the page.
+                delete editors[ace_editor_id];
             }
             return !!current_editor;
 
