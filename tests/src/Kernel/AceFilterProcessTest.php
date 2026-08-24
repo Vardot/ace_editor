@@ -123,4 +123,31 @@ class AceFilterProcessTest extends KernelTestBase {
     $this->assertSame([], $result['instances']);
   }
 
+  /**
+   * Entity-encoded markup outside a tag is never decoded to live markup.
+   *
+   * A previous filter (for example "Limit allowed HTML tags") leaves markup
+   * entity-encoded; decoding the whole text here would return it as live HTML,
+   * a stored XSS.
+   */
+  public function testEntityEncodedMarkupIsNotDecoded(): void {
+    $result = $this->process('&lt;script&gt;alert(1)&lt;/script&gt;');
+
+    $this->assertSame([], $result['raised']);
+    $this->assertStringNotContainsString('<script>', $result['markup']);
+    $this->assertStringContainsString('&lt;script&gt;', $result['markup']);
+  }
+
+  /**
+   * The snippet content inside a tag is decoded for the editor.
+   */
+  public function testTagContentIsDecoded(): void {
+    $result = $this->process('<ace>&lt;div&gt;x&lt;/div&gt;</ace>');
+
+    $this->assertSame([], $result['raised']);
+    $this->assertStringContainsString('ace-editor-inline', $result['markup']);
+    $last = end($result['instances']);
+    $this->assertStringContainsString('<div>x</div>', $last['content']);
+  }
+
 }

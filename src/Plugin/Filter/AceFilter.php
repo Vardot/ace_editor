@@ -117,8 +117,11 @@ class AceFilter extends FilterBase {
     // as opposed to overwriting the data structure.
     $js_settings = &drupal_static(__FUNCTION__);
 
-    $text = html_entity_decode($text);
-
+    // Do NOT html_entity_decode the whole text: that would reverse the
+    // sanitization of any filter that ran before this one (for example
+    // "Limit allowed HTML tags"), turning entity-encoded markup back into
+    // live markup - a stored XSS. Only the snippet content inside an <ace>
+    // tag is decoded below, and it is handed to Ace as text, never as HTML.
     if (preg_match_all("/<ace.*?>(.*?)\s*<\/ace>/s", $text, $match)) {
       // Stub out js settings data structure once per page load.
       if (!isset($js_settings)) {
@@ -132,7 +135,7 @@ class AceFilter extends FilterBase {
         // Generate a truly unique id to append as element ID.
         $unique_id = uniqid();
         $element_id = 'ace-editor-inline' . $unique_id;
-        $content = trim($match[1][$key], "\n\r\0\x0B");
+        $content = html_entity_decode(trim($match[1][$key], "\n\r\0\x0B"));
         $replace = '<pre id="' . $element_id . '"></pre>';
         // Override settings with attributes on the tag.
         $settings = $this->getConfiguration()['settings'];
