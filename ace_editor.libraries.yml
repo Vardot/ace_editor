@@ -24,6 +24,7 @@ formatter:
     - core/jquery
     - core/drupal
     - core/drupalSettings
+    - core/once
 
 filter:
   version: VERSION

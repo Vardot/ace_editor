@@ -42,6 +42,15 @@ ace_editor.settings:
     use_wrap_mode:
       type: boolean
       label: 'Use wrap mode'
+    syntax_field:
+      type: string
+      label: 'Field supplying the syntax'
+    modelist:
+      type: boolean
+      label: 'Use the Ace modelist'
+    inline:
+      type: boolean
+      label: 'Display as inline code'
 
 filter_settings.ace_filter:
   type: mapping
@@ -85,6 +94,15 @@ filter_settings.ace_filter:
     use_wrap_mode:
       type: boolean
       label: 'Use wrap mode'
+    syntax_field:
+      type: string
+      label: 'Field supplying the syntax'
+    modelist:
+      type: boolean
+      label: 'Use the Ace modelist'
+    inline:
+      type: boolean
+      label: 'Display as inline code'
 
 # The text editor settings, as saved by the Ace Editor settings form on a text
 # format (issue #3605370). The form nests its values under "fieldset"; the flat
@@ -133,6 +151,15 @@ editor.settings.ace_editor:
     use_wrap_mode:
       type: boolean
       label: 'Use wrap mode'
+    syntax_field:
+      type: string
+      label: 'Field supplying the syntax'
+    modelist:
+      type: boolean
+      label: 'Use the Ace modelist'
+    inline:
+      type: boolean
+      label: 'Display as inline code'
 
 # The settings of one Ace editor instance, shared by the text editor and the
 # field formatter schemas.
@@ -176,6 +203,15 @@ ace_editor.editor_settings:
     use_wrap_mode:
       type: boolean
       label: 'Use wrap mode'
+    syntax_field:
+      type: string
+      label: 'Field supplying the syntax'
+    modelist:
+      type: boolean
+      label: 'Use the Ace modelist'
+    inline:
+      type: boolean
+      label: 'Display as inline code'
 
 # The Ace Format field formatter settings (issue #3618752).
 field.formatter.settings.ace_formatter:
