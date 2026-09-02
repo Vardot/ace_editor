@@ -43,21 +43,20 @@ class AceEditorSearchBoxTest extends KernelTestBase {
   /**
    * Returns the JavaScript assets the alter hook adds to a library.
    *
-   * The external Ace library is not present in a test build, so the hook is
-   * driven with a known path to assert which assets it asks for.
+   * @param \Drupal\ace_editor\AceEditorLibraries $discovery
+   *   The library discovery to drive the hook with.
    *
    * @return string[]
    *   The asset paths, keyed by library name.
    */
-  protected function alteredAssets(): array {
+  protected function alteredAssets(AceEditorLibraries $discovery): array {
     $libraries = [
       'primary' => ['js' => []],
       'formatter' => ['js' => []],
       'filter' => ['js' => []],
     ];
 
-    $hooks = $this->container->get(AceEditorHooks::class);
-    $hooks->libraryInfoAlter($libraries, 'ace_editor');
+    (new AceEditorHooks($discovery))->libraryInfoAlter($libraries, 'ace_editor');
 
     $assets = [];
     foreach ($libraries as $name => $library) {
@@ -67,13 +66,54 @@ class AceEditorSearchBoxTest extends KernelTestBase {
   }
 
   /**
+   * Returns a library discovery that reports a known path.
+   *
+   * @param string|false $path
+   *   The path libPath() should report.
+   */
+  protected function discoveryReporting(string|false $path): AceEditorLibraries {
+    return new class(
+      $this->container->get('file_system'),
+      $this->container->get('extension.list.module'),
+      $this->container->get('extension.list.profile'),
+      $this->container->get('config.factory'),
+      NULL,
+      $this->container->get('cache.discovery'),
+      $path,
+    ) extends AceEditorLibraries {
+
+      public function __construct(
+        $file_system,
+        $module_extension_list,
+        $profile_extension_list,
+        $config_factory,
+        ?string $install_profile,
+        $cache_discovery,
+        protected string|false $reportedPath = FALSE,
+      ) {
+        parent::__construct($file_system, $module_extension_list, $profile_extension_list, $config_factory, $install_profile, $cache_discovery);
+      }
+
+      /**
+       * {@inheritdoc}
+       */
+      public function libPath(): string|false {
+        return $this->reportedPath;
+      }
+
+    };
+  }
+
+  /**
    * Nothing is attached while the external library is missing.
    *
-   * The library is absent in a test build, so this documents the guard: the
-   * hook adds no asset paths it cannot serve.
+   * The guard is what is under test: the hook adds no asset path it cannot
+   * serve. The missing-library condition is created here rather than read off
+   * the build, because the module requires vardot/ace with Composer and the
+   * library is present in any built site.
    */
   public function testNoAssetsWithoutTheLibrary(): void {
-    $assets = $this->alteredAssets();
+    $assets = $this->alteredAssets($this->discoveryReporting(FALSE));
 
     $this->assertSame([], $assets['primary']);
     $this->assertSame([], $assets['formatter']);
@@ -84,33 +124,13 @@ class AceEditorSearchBoxTest extends KernelTestBase {
    * The editing library asks for the search box extension.
    */
   public function testEditingLibraryRequestsTheSearchBox(): void {
-    $libraries = ['primary' => ['js' => []], 'formatter' => ['js' => []], 'filter' => ['js' => []]];
+    // Drive the discovery with a known path, so the assertion is about which
+    // library asks for the extension and not about where Ace happens to sit.
+    $assets = $this->alteredAssets($this->discoveryReporting('/libraries/ace/'));
 
-    // Drive the discovery service with a known path so the alter hook has a
-    // library to build asset paths from: the external Ace library is not
-    // present in a test build.
-    $discovery = new class(
-      $this->container->get('file_system'),
-      $this->container->get('extension.list.module'),
-      $this->container->get('extension.list.profile'),
-      $this->container->get('config.factory'),
-      NULL,
-      $this->container->get('cache.discovery'),
-    ) extends AceEditorLibraries {
-
-      /**
-       * {@inheritdoc}
-       */
-      public function libPath(): string|false {
-        return '/libraries/ace/';
-      }
-
-    };
-    $discovery->alterLibraryInfo($libraries);
-
-    $this->assertContains('/libraries/ace/ext-searchbox.js', array_keys($libraries['primary']['js']));
-    $this->assertNotContains('/libraries/ace/ext-searchbox.js', array_keys($libraries['formatter']['js']));
-    $this->assertNotContains('/libraries/ace/ext-searchbox.js', array_keys($libraries['filter']['js']));
+    $this->assertContains('/libraries/ace/ext-searchbox.js', $assets['primary']);
+    $this->assertNotContains('/libraries/ace/ext-searchbox.js', $assets['formatter']);
+    $this->assertNotContains('/libraries/ace/ext-searchbox.js', $assets['filter']);
   }
 
 }
